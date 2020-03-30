@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+
+<generatorConfiguration>
+    <!-- 数据库驱动包路径 -->
+    <classPathEntry location="/home/anon/.m2/repository/mysql/mysql-connector-java/8.0.17/mysql-connector-java-8.0.17.jar" />
+
+    <context id="context1" targetRuntime="MyBatis3">
+        <!-- 为模型生成序列化方法-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!-- 为生成的Java模型创建一个toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!-- 生成注释配置 -->
+        <commentGenerator type="">
+            <!-- 是否取消注释 -->
+            <property name="suppressAllComments" value="false" />
+            <!-- 数据库注释支持 -->
+            <property name="addRemarkComments" value="true"/>
+            <!-- 时间格式设置 -->
+            <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+        </commentGenerator>
+        <!-- 连接数据库 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver" connectionURL="jdbc:mysql://47.103.0.173:3306/Muti?serverTimezone=UTC&amp;nullCatalogMeansCurrent=true" userId="mxx" password="123456" />
+        <!-- 数值类型数据是否全部使用BigDecimal类型 -->
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        <!-- 生成po类 -->
+        <javaModelGenerator targetPackage="com.mutiny.demo.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!-- 生成xml映射文件 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false" />
+            <property name="isMergeable" value="false" />
+        </sqlMapGenerator>
+        <!-- 生成dao类 -->
+        <javaClientGenerator targetPackage="com.mutiny.demo.dao" targetProject="src/main/java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+        <!-- 需要生产po类的表 -->
+<!--        <table tableName="User" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Company" domainObjectName="Company" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Govern" domainObjectName="Govern" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Default_Module" domainObjectName="DefaultModule" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+        <table tableName="DefaultData" domainObjectName="DefaultData" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
+        <table tableName="Project_User" domainObjectName="ProjectUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
+        <table tableName="Module" domainObjectName="Module" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
+<!--        <table tableName="File_Answer" domainObjectName="FileAnswer" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="File_Module" domainObjectName="FileModule" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="File_Module_Temp" domainObjectName="FileModuleTemp" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Module_User" domainObjectName="ModuleUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Module" domainObjectName="Module" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="KeyFile" domainObjectName="KeyFile" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Log_Calculate" domainObjectName="LogCalculate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Log" domainObjectName="Log" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Message_Info" domainObjectName="MessageInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Message_User" domainObjectName="MessageUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Message_Send" domainObjectName="MessageSend" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+    </context>
+</generatorConfiguration>
