@@ -17,7 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,7 +62,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.ProjectCreate(projectCreateDTO.ToProject(),GetUsername()));
     }
 
 
@@ -79,7 +78,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.ProjectAddModuleDescription(projectModulesDescriptionDTO));
     }
 
 
@@ -96,7 +94,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.changeCode(projectChangeCodeDTO));
     }
 
 
@@ -114,7 +111,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.addModule(projectModuleAddDTO));
     }
 
     @MyLog(operation = "对项目增加固定模型",database = "Module,Module_User")
@@ -130,7 +126,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.addDefaultModule(projectDefaultAddDTO));
     }
 
     @MyLog(operation = "查看项目情况",database = "Project,Project_User")
@@ -146,7 +141,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getInfo(projectID));
     }
 
     @MyLog(operation = "查看完成结束项目个数",database = "Project,Project_User")
@@ -162,7 +156,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getIsEnd(GetUsername()));
     }
 
     @MyLog(operation = "查看创建的项目",database = "Project,Project_User")
@@ -178,7 +171,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"creater",currindex-1,pagesize));
     }
 
 
@@ -195,7 +187,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"join",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看旁观的项目",database = "Project,Project_User")
@@ -211,7 +202,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"watch",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看创建的固定项目",database = "Project,Project_User")
@@ -227,7 +217,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"creater",currindex-1,pagesize));
     }
 
 
@@ -244,7 +233,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"join",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看旁观的固定项目",database = "Project,Project_User")
@@ -260,7 +248,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"watch",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看全部创建的项目",database = "Project,Project_User")
@@ -276,7 +263,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"creater",currindex-1,pagesize));
     }
 
 
@@ -293,7 +279,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"join",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看全部旁观的项目",database = "Project,Project_User")
@@ -309,7 +294,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"watch",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看全部创建的固定项目",database = "Project,Project_User")
@@ -325,7 +309,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"creater",currindex-1,pagesize));
     }
 
 
@@ -342,7 +325,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"join",currindex-1,pagesize));
     }
 
     @MyLog(operation = "查看全部旁观的固定项目",database = "Project,Project_User")
@@ -358,7 +340,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getProject(GetUsername(),"watch",currindex-1,pagesize));
     }
 
 
@@ -377,7 +358,6 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.delete(GetUsername(),projectID));
     }
 
     @MyLog(operation = "根据项目ID请求模型",database = "Project")
@@ -393,6 +373,35 @@ public class ProjectController {
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);
-//        return CommonResult.success(projectService.getModules(projectID));
+    }
+
+    @MyLog(operation = "查看项目成员",database = "Project,Project_User")
+    @ApiOperation(value = "查看项目成员")
+    @RequestMapping(value = "/getMember/{projectID}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getMember(@PathVariable int projectID){
+        List<ProjectMemberDTO> str = null;
+        try {
+            str= projectService.getProjectMember(projectID);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "创建了项目没继续的",database = "Project,Project_User,Module")
+    @ApiOperation(value = "创建了项目没继续的")
+    @RequestMapping(value = "/showProjectNoModule", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> showProjectNoModule(){
+        List<ProjectNoModuleDTO> str = null;
+        try {
+            str= projectService.showProjectNoModule(GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
     }
 }

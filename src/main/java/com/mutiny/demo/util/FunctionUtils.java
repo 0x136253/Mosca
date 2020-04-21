@@ -525,7 +525,7 @@ public class FunctionUtils {
     public static void main(String[] args) {
         FunctionUtils functionUtils = new FunctionUtils();
 //        System.out.println(Arrays.toString(functionUtils.spiltPunction("max(min(x*y+z,z),max(x*c,z))+max(min(x*y,z),z)+f*0.15*c+5.1+9+x*y+z")));
-        String answ = functionUtils.funcHandel("0.5*a+45.8*b-(c+d)");
+        String answ = functionUtils.funcHandel("8x+10y");
         System.out.println(answ);
         System.out.println(Arrays.toString(functionUtils.getMap()));
     }

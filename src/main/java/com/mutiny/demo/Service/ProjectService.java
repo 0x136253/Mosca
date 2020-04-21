@@ -4,6 +4,8 @@ import com.mutiny.demo.dto.*;
 import com.mutiny.demo.pojo.Project;
 import io.swagger.models.auth.In;
 
+import java.util.List;
+
 /**
  * @Author: Anonsmd
  * @Date: 2020/1/16 18:19
@@ -20,4 +22,6 @@ public interface ProjectService {
     ProjectListDTO getProjectAll(String username, String type, Integer is_default) throws Exception;
     String delete(String username,int projectID) throws Exception;
     ModuleListDTO getModules(int projectID) throws Exception;
+    List<ProjectMemberDTO> getProjectMember(int projectID) throws Exception;
+    List<ProjectNoModuleDTO> showProjectNoModule(String username) throws Exception;
 }

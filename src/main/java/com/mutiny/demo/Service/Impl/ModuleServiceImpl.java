@@ -72,15 +72,22 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public List<DefaultModule> defaultModule() throws Exception {
+    public List<DefaultModuleDTO> defaultModule() throws Exception {
         DefaultModuleExample defaultModuleExample = new DefaultModuleExample();
         defaultModuleExample.createCriteria().andIsuserfulEqualTo(true);
-        return defaultModuleMapper.selectByExample(defaultModuleExample);
+        List<DefaultModule> defaultModuleList = defaultModuleMapper.selectByExample(defaultModuleExample);
+        List<DefaultModuleDTO> answ = new ArrayList<>();
+        for (DefaultModule r:defaultModuleList){
+            DefaultModuleDTO defaultModuleDTO = new DefaultModuleDTO(r);
+            answ.add(defaultModuleDTO);
+        }
+        return answ;
     }
 
     @Override
-    public DefaultModule defaultModule(int DefaultId) throws Exception {
-        return defaultModuleMapper.selectByPrimaryKey(DefaultId);
+    public DefaultModuleDTO defaultModule(int DefaultId) throws Exception {
+        DefaultModule r = defaultModuleMapper.selectByPrimaryKey(DefaultId);
+        return new DefaultModuleDTO(r);
     }
 
     @Override
@@ -179,6 +186,11 @@ public class ModuleServiceImpl implements ModuleService {
             answList.add(showDefaultDataDTO);
         }
         return answList;
+    }
+
+    @Override
+    public ModuleInfoDTO getModule(int moduleId) throws Exception {
+        return new ModuleInfoDTO(moduleMapper.selectByPrimaryKey(moduleId));
     }
 
     public boolean checkExistModule(int ID){

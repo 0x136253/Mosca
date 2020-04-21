@@ -14,8 +14,8 @@ import java.util.List;
 public interface ModuleService {
     String addefaultData(ModuleDefaultDataAddDTO moduleDefaultDataAddDTO,String username) throws Exception;
     List<DefaultData> defaultModuleData(int defaultID) throws Exception;
-    List<DefaultModule> defaultModule() throws Exception;
-    DefaultModule defaultModule(int DefaultId) throws Exception;
+    List<DefaultModuleDTO> defaultModule() throws Exception;
+    DefaultModuleDTO defaultModule(int DefaultId) throws Exception;
     String shouAnsw(int ModuleID) throws Exception;
     String delete(int ModuleID,String username) throws Exception;
     String deleteDefaultData(int defaultDataId,String username) throws Exception;
@@ -23,4 +23,5 @@ public interface ModuleService {
     String addDefualt(DefaultModuleAddDTO defaultModuleAddDTO) throws Exception;
     KeyDTO returnKey(int moduleId, boolean isDefaultId) throws Exception;
     List<ShowDefaultDataDTO> showDefaultData(String getUsername) throws Exception;
+    ModuleInfoDTO getModule(int moduleId) throws Exception;
 }

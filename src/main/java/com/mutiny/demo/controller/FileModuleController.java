@@ -176,7 +176,7 @@ public class FileModuleController {
     @ApiOperation(value = "获取数据源状态，企业")
     @GetMapping(value = "/showModuleStatus")
     @ResponseBody
-    @PreAuthorize("hasAnyRole('GOVER','SYSTEM')")
+    @PreAuthorize("hasAnyRole('GOVER','ADMIN','SYSTEM')")
     public ResponseEntity<Map<String,Object>> showModuleStatus(){
         List<ModuleStatusDTO> str = null;
         try {

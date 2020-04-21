@@ -102,7 +102,7 @@ public class ModuleController {
     @ResponseBody
     @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
     public ResponseEntity<Map<String,Object>> defaultModule(){
-        List<DefaultModule> defaultModules = null;
+        List<DefaultModuleDTO> defaultModules = null;
         try {
             defaultModules= moduleService.defaultModule();
         }catch (Exception e){
@@ -117,7 +117,7 @@ public class ModuleController {
     @ResponseBody
     @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
     public ResponseEntity<Map<String,Object>> defaultModule(@PathVariable int DefaultID){
-        DefaultModule defaultModules = null;
+        DefaultModuleDTO defaultModules = null;
         try {
             defaultModules= moduleService.defaultModule(DefaultID);
         }catch (Exception e){
@@ -211,6 +211,21 @@ public class ModuleController {
         KeyDTO str = null;
         try {
             str= moduleService.returnKey(defaultDataId,true);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "根据ModuleId请求模型详情", database = "Module")
+    @ApiOperation(value = "根据ModuleId请求模型详情(自定义模型)")
+    @RequestMapping(value = "/getModule/{ModuleId}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getModule(@PathVariable int ModuleId){
+        ModuleInfoDTO str = null;
+        try {
+            str= moduleService.getModule(ModuleId);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }

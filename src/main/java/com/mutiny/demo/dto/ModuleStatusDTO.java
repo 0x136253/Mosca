@@ -14,6 +14,13 @@ public class ModuleStatusDTO {
     public ModuleStatusDTO() {
     }
 
+    public ModuleStatusDTO(int projectId, int moduleId, String projectName, String moduleName) {
+        this.projectId = projectId;
+        this.moduleId = moduleId;
+        this.projectName = projectName;
+        this.moduleName = moduleName;
+    }
+
     public ModuleStatusDTO(int projectId) {
         this.projectId = projectId;
     }

@@ -32,6 +32,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ModuleUserMapper moduleUserMapper;
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private FileOtherMapper fileOtherMapper;
+    @Autowired
     private MessageSender messageSender;
     /**
      * 还需加入creater
@@ -58,6 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectUser.setProjectId(projectID);
         projectUser.setUserId(username);
         projectUser.setType("creater");
+        projectUser.setIntime(new Date());
         projectUserMapper.insertSelective(projectUser);
         messageSender.sendPrivate("项目情况通报","项目创建成功",username);
         return new ProjectInfoDTO(projectMapper.selectByPrimaryKey(projectID),username);
@@ -125,6 +130,7 @@ public class ProjectServiceImpl implements ProjectService {
             count++;
             Module module = moduleAddDTOList.get(i).toModule(count,projectID);
             module = FunctionUtils.moduleHandle(module);
+            module.setCreatetime(new Date());
             module.setKeyfileid(keyFileComponent.creatKeyFile(128));
             moduleMapper.insertSelective(module);
         }
@@ -257,6 +263,52 @@ public class ProjectServiceImpl implements ProjectService {
         ModuleListDTO moduleListDTO =new ModuleListDTO();
         moduleListDTO.setModuleInfoDTOList(moduleInfoDTOS);
         return moduleListDTO;
+    }
+
+    @Override
+    public List<ProjectMemberDTO> getProjectMember(int projectID) throws Exception {
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andProjectIdEqualTo(projectID);
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        List<ProjectMemberDTO> answ = new ArrayList<>();
+        for (ProjectUser r:projectUserList){
+            ProjectMemberDTO projectMemberDTO = new ProjectMemberDTO(r.getUserId(),r.getIntime(),r.getType());
+            User user = userMapper.selectByPrimaryKey(r.getUserId());
+            projectMemberDTO.setName(user.getName());
+            if (user.getPortraitId()!=null){
+                FileOther fileOther = new FileOther();
+                projectMemberDTO.setPortraitURL(fileOther.getFileUrl());
+            }
+            answ.add(projectMemberDTO);
+        }
+        return answ;
+    }
+
+    @Override
+    public List<ProjectNoModuleDTO> showProjectNoModule(String username) throws Exception {
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andUserIdEqualTo(username).andTypeEqualTo("creater");
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        List<ProjectNoModuleDTO> answ = new ArrayList<>();
+        for (ProjectUser r:projectUserList){
+            Project project = projectMapper.selectByPrimaryKey(r.getProjectId());
+            if (!project.getIsUserful()){
+                continue;
+            }
+            ModuleExample moduleExample = new ModuleExample();
+            moduleExample.clear();
+            moduleExample.createCriteria().andProjectIdEqualTo(r.getProjectId());
+            List<Module> moduleList = moduleMapper.selectByExample(moduleExample);
+            if (moduleList.size()!=0){
+                continue;
+            }
+            ProjectNoModuleDTO projectNoModuleDTO = new ProjectNoModuleDTO(project.getProjectId(),project.getProjectName());
+            if (project.getCreateTime()!=null){
+                projectNoModuleDTO.setCreateTime(project.getCreateTime());
+            }
+            answ.add(projectNoModuleDTO);
+        }
+        return answ;
     }
 
 

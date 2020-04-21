@@ -4,8 +4,9 @@ import com.mutiny.demo.pojo.Module;
 import com.mutiny.demo.pojo.Project;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Author: Anonsmd
@@ -28,8 +29,8 @@ public class ModuleInfoDTO {
     private int paramNumber;
     @ApiModelProperty(value = "扩大倍数", required = true)
     private int multNum;
-    @ApiModelProperty(value = "模型描述", required = true)
-    private String description;
+//    @ApiModelProperty(value = "模型描述", required = true)
+//    private String description;
     @ApiModelProperty(value = "项目ID", required = false)
     private int projectID;
     @ApiModelProperty(value = "是否计算完毕", required = false)
@@ -40,7 +41,10 @@ public class ModuleInfoDTO {
     private boolean Is_Useful;
     @ApiModelProperty(value = "固定模型对应的数据源,仅当模型是固定模型的时候有", required = true)
     private int DefaultModule_ID;
-
+    private Date upTime;
+    private Date createTime;
+    private int status;
+    private List<ModuleUploadInfoDTO> map;
 
     public ModuleInfoDTO() {
     }
@@ -59,7 +63,7 @@ public class ModuleInfoDTO {
             this.paramNumber=module.getParamNumber();
         }
         if (module.getDescription()!=null) {
-            this.description=module.getDescription();
+            this.map=showUploadNeed(module.getFunction(),module.getDescription());
         }
         if (module.getProjectId()!=null) {
             this.projectID=module.getProjectId();
@@ -87,6 +91,15 @@ public class ModuleInfoDTO {
         }
         if (module.getDefaultmoduleId()!=null) {
             this.DefaultModule_ID=module.getDefaultmoduleId();
+        }
+        if (module.getCreatetime()!=null){
+            this.createTime = module.getCreatetime();
+        }
+        if (module.getUptime()!=null){
+            this.upTime = module.getUptime();
+        }
+        if (module.getStatus()!=null){
+            this.status = module.getStatus();
         }
     }
 
@@ -154,12 +167,36 @@ public class ModuleInfoDTO {
         this.paramNumber = paramNumber;
     }
 
-    public String getDescription() {
-        return description;
+    public Date getUpTime() {
+        return upTime;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUpTime(Date upTime) {
+        this.upTime = upTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public List<ModuleUploadInfoDTO> getMap() {
+        return map;
+    }
+
+    public void setMap(List<ModuleUploadInfoDTO> map) {
+        this.map = map;
     }
 
     public int getProjectID() {
@@ -200,5 +237,50 @@ public class ModuleInfoDTO {
 
     public void setDefaultModule_ID(int defaultModule_ID) {
         DefaultModule_ID = defaultModule_ID;
+    }
+
+    private List<ModuleUploadInfoDTO> showUploadNeed(String func, String des){
+        Map<String,String> map = getCharDes(des);
+        Iterator<String> chars = getIdentifiy(func).iterator();
+        List<ModuleUploadInfoDTO> answ = new ArrayList<>();
+        while (chars.hasNext()){
+            String tmp = chars.next();
+            String dess = null;
+            if (map.containsKey(tmp)){
+                dess=map.get(tmp);
+            }
+            ModuleUploadInfoDTO temp = new ModuleUploadInfoDTO(tmp,dess,"整数",16);
+            answ.add(temp);
+        }
+        return answ;
+    }
+
+
+    private Map<String,String> getCharDes(String Desc){
+        Map<String,String> answ = new HashMap<>();
+        String[] strs = Desc.split(" ");
+        for (String record:strs){
+            String[] temps = record.split(":");
+            if (temps.length<2){
+                continue;
+            }
+            answ.put(temps[0],temps[1]);
+        }
+        return answ;
+    }
+
+    private Set<String> getIdentifiy(String function){
+        String pattern = "[a-zA-Z]+";
+        Pattern r = Pattern.compile(pattern);
+        Matcher matcher = r.matcher(function);
+        Set<String> answ = new HashSet<>();
+        while (matcher.find()){
+            String tem = matcher.group();
+            if (tem.equals("max") || tem.equals("MAX") ||tem.equals("min") ||tem.equals("MIN")){
+                continue;
+            }
+            answ.add(tem);
+        }
+        return answ;
     }
 }

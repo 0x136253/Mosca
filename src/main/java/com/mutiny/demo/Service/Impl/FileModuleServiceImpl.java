@@ -44,6 +44,8 @@ public class FileModuleServiceImpl implements FileModuleService {
     private ProjectUserMapper projectUserMapper;
     @Autowired
     private MessageSender messageSender;
+    @Autowired
+    private ProjectMapper projectMapper;
 
     @Override
     public String delete(String username, int FileID) throws Exception {
@@ -168,6 +170,8 @@ public class FileModuleServiceImpl implements FileModuleService {
             Synthesis(moduleId,isDefault);
             if (!isDefault){
                 Module module = moduleMapper.selectByPrimaryKey(moduleId);
+                module.setUptime(new Date());
+                module.setStatus(1);
                 String projectUser = projectUserMapper.findCreater(module.getProjectId());
                 String text = String.format("您的ID为%d项目中的模型(ID=%d)参数已齐全，现在可前往平台开始计算",module.getProjectId(),moduleId);
                 messageSender.sendPrivate("模型情况通报",text,projectUser);
@@ -240,15 +244,65 @@ public class FileModuleServiceImpl implements FileModuleService {
         for (ModuleUser record:moduleUsers){
             DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(record.getModuleId());
             DefaultModule defaultModule = defaultModuleMapper.selectByPrimaryKey(defaultData.getDefaultId());
+            if (!defaultData.getIsUserful() || !defaultModule.getIsuserful()){
+                continue;
+            }
             DefaultDataStatusDTO defaultDataStatusDTO = new DefaultDataStatusDTO(defaultModule.getName(),defaultData.getDataName(),defaultData.getDefaultmoduleId());
-
+            if (defaultData.getCreatetime()!=null){
+                defaultDataStatusDTO.setCreateTime(defaultData.getCreatetime());
+            }
+            if (defaultData.getUptime()!=null){
+                defaultDataStatusDTO.setUpTime(defaultData.getUptime());
+            }
+            if (defaultData.getStatus()!=null){
+                defaultDataStatusDTO.setStatus(defaultData.getStatus());
+            }
+            answ.add(defaultDataStatusDTO);
         }
-        return null;
+        return answ;
     }
 
     @Override
     public List<ModuleStatusDTO> showModuleStatus(String getUsername) throws Exception {
-        return null;
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andUserIdEqualTo(getUsername);
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        List<ModuleStatusDTO> answ = new ArrayList<>();
+        for (ProjectUser record:projectUserList){
+            if (record.getType().equals("user")){
+                continue;
+            }
+            Project project = projectMapper.selectByPrimaryKey(record.getProjectId());
+            if (project.getIsDefault() || !project.getIsUserful()){
+                continue;
+            }
+            ModuleExample moduleExample = new ModuleExample();
+            moduleExample.clear();
+            moduleExample.createCriteria().andProjectIdEqualTo(project.getProjectId()).andIsUserfulEqualTo(true);
+            List<Module> moduleList = moduleMapper.selectByExample(moduleExample);
+            ModuleStatusDTO moduleStatusDTO = new ModuleStatusDTO();
+            if (moduleList.size()==0){
+                continue;
+            }
+            for (Module res:moduleList){
+                moduleStatusDTO.setModuleId(res.getModuleId());
+                moduleStatusDTO.setModuleName(res.getModuleName());
+                moduleStatusDTO.setProjectId(record.getProjectId());
+                moduleStatusDTO.setProjectName(project.getProjectName());
+                if (res.getCreatetime()!=null) {
+                    moduleStatusDTO.setCreateTime(res.getCreatetime());
+                }
+                if (res.getUptime()!=null) {
+                    moduleStatusDTO.setUpTime(res.getUptime());
+                }
+                if (res.getStatus()!=null) {
+                    moduleStatusDTO.setStatus(res.getStatus());
+                }
+            }
+            answ.add(moduleStatusDTO);
+
+        }
+        return answ;
     }
 
     private Map<String,String> getCharDes(String Desc){

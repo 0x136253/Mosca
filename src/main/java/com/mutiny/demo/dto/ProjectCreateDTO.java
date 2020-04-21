@@ -3,6 +3,8 @@ package com.mutiny.demo.dto;
 import com.mutiny.demo.pojo.Project;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Date;
+
 /**
  * @Author: Anonsmd
  * @Date: 2020/1/11 8:58
@@ -20,6 +22,7 @@ public class ProjectCreateDTO {
         project.setProjectName(projectName);
         project.setProjectPurpose(projectPurpose);
         project.setProjectDescription(projectDescription);
+        project.setCreateTime(new Date());
         return project;
     }
 

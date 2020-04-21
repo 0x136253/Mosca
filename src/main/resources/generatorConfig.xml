@@ -43,12 +43,12 @@
         </javaClientGenerator>
         <!-- 需要生产po类的表 -->
 <!--        <table tableName="User" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
-<!--        <table tableName="Company" domainObjectName="Company" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+        <table tableName="Company" domainObjectName="Company" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
 <!--        <table tableName="Govern" domainObjectName="Govern" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
 <!--        <table tableName="Default_Module" domainObjectName="DefaultModule" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
-        <table tableName="DefaultData" domainObjectName="DefaultData" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
-        <table tableName="Project_User" domainObjectName="ProjectUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
-        <table tableName="Module" domainObjectName="Module" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>
+<!--        <table tableName="DefaultData" domainObjectName="DefaultData" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Project_User" domainObjectName="ProjectUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+<!--        <table tableName="Module" domainObjectName="Module" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
 <!--        <table tableName="File_Answer" domainObjectName="FileAnswer" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
 <!--        <table tableName="File_Module" domainObjectName="FileModule" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
 <!--        <table tableName="File_Module_Temp" domainObjectName="FileModuleTemp" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->

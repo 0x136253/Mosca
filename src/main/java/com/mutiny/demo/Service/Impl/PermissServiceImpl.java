@@ -60,6 +60,7 @@ public class PermissServiceImpl implements PermissService {
         projectUser.setProjectId(project.getProjectId());
         projectUser.setType("parter");
         projectUser.setUserId(username);
+        projectUser.setIntime(new Date());
         projectUserMapper.insertSelective(projectUser);
 
         ProjectUserExample projectUserExample = new ProjectUserExample();
@@ -81,6 +82,7 @@ public class PermissServiceImpl implements PermissService {
         ProjectUser projectUser = new ProjectUser();
         projectUser.setProjectId(project.getProjectId());
         projectUser.setType("watcher");
+        projectUser.setIntime(new Date());
         projectUser.setUserId(username);
         projectUserMapper.insertSelective(projectUser);
         return "Success";
