@@ -46,6 +46,8 @@ public class SysCalLogAspect {
     @Autowired
     private ObjectUtils objectUtils;
     @Autowired
+    private ModuleMapper moduleMapper;
+    @Autowired
     private LogCalculateMapper logDAO;
     @Autowired
     private UserDetailsService userDetailsService;
@@ -88,6 +90,11 @@ public class SysCalLogAspect {
         }
         sysLog.setModuleid(moduleID);
         sysLog.setIsDefault(isDefault);
+        Module module = moduleMapper.selectByPrimaryKey(moduleID);
+        if (module!=null && module.getIsDefault()){
+            sysLog.setIsDefault(module.getIsDefault());
+            sysLog.setModuleid(module.getDefaultmoduleId());
+        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         //获取用户名
         String authHeader = request.getHeader(this.tokenHeader);

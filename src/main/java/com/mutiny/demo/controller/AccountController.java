@@ -85,6 +85,21 @@ public class AccountController {
         return CommonResult.success(user);
     }
 
+    @MyLog(operation = "获取头像",database = "User")
+    @ApiOperation(value = "获取头像")
+    @RequestMapping(value = "/showPortrait", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> showPortrait(){
+        String user = null;
+        try {
+            user= adminService.showPortrait(GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
 
     @MyLog(operation = "获取公司信息",database = "Comapny")
     @ApiOperation(value = "获取公司信息")

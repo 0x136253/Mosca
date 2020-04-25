@@ -43,6 +43,10 @@ public class PermissServiceImpl implements PermissService {
 
     @Override
     public String partJoin(String inviteCode,String username) throws Exception {
+        if (inviteCode.startsWith("\"")){
+            inviteCode=inviteCode.substring(1,inviteCode.length()-1);
+        //    System.out.println(inviteCode);
+        }
         ProjectExample projectExample = new ProjectExample();
         projectExample.createCriteria().andInviteCode1EqualTo(inviteCode);
         Project project = projectMapper.selectByExample(projectExample).get(0);
@@ -73,6 +77,10 @@ public class PermissServiceImpl implements PermissService {
 
     @Override
     public String watchJoin(String inviteCode,String username) throws Exception {
+        if (inviteCode.startsWith("\"")){
+            inviteCode=inviteCode.substring(1,inviteCode.length()-1);
+          //  System.out.println(inviteCode);
+        }
         ProjectExample projectExample = new ProjectExample();
         projectExample.createCriteria().andInviteCode2EqualTo(inviteCode);
         Project project = projectMapper.selectByExample(projectExample).get(0);
@@ -141,6 +149,7 @@ public class PermissServiceImpl implements PermissService {
                 }
                 permissionApplyDTO.setDefaultDataId(apply.getModuleId());
                 permissionApplyDTO.setID(apply.getRelationId());
+                permissionApplyDTO.setDefaultId(defaultData.getDefaultId());
                 permissionApplyDTO.setModuleName(ModuleName);
                 permissionApplyDTO.setProjectId(apply.getProjectid());
                 permissionApplyDTO.setStatus(apply.getIsPermiss());

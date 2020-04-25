@@ -193,6 +193,46 @@ public class ModuleServiceImpl implements ModuleService {
         return new ModuleInfoDTO(moduleMapper.selectByPrimaryKey(moduleId));
     }
 
+    @Override
+    public List<String> getfunctions(int moduleId) throws Exception {
+        if (!checkExistModule(moduleId)){
+            throw new Exception("Not Exist!!");
+        }
+        Module module = moduleMapper.selectByPrimaryKey(moduleId);
+        return new ArrayList<>(FunctionUtils.getIdentifiy(module.getFunction()));
+    }
+
+    @Override
+    public DefaultData getDefaultDataInfo(int defaultDateId) throws Exception {
+        return defaultDataMapper.selectByPrimaryKey(defaultDateId);
+    }
+
+    @Override
+    public List<ModuleInfoDTO> getCompleteModuleInfo(String getUsername) throws Exception {
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andUserIdEqualTo(getUsername);
+        List<ProjectUser>  projectUserList= projectUserMapper.selectByExample(projectUserExample);
+        List<Module> moduleList = new ArrayList<>();
+        List<ModuleInfoDTO> answ = new ArrayList<>();
+        for(ProjectUser record:projectUserList){
+           ModuleExample moduleExample = new ModuleExample();
+           moduleExample.createCriteria().andProjectIdEqualTo(record.getProjectId());
+           List<Module> tempModuleList = moduleMapper.selectByExample(moduleExample);
+           for(Module mod:tempModuleList){
+                if (mod.getIsCalculate()){
+                    ModuleInfoDTO temp = new ModuleInfoDTO(mod);
+                    projectUserExample = new ProjectUserExample();
+                    projectUserExample.createCriteria().andProjectIdEqualTo(record.getProjectId()).andTypeEqualTo("creater");
+                    List<ProjectUser>  tempProjectUserList= projectUserMapper.selectByExample(projectUserExample);
+                    temp.setCreater(tempProjectUserList.get(0).getUserId());
+                    answ.add(temp);
+                }
+            }
+        }
+        return answ;
+    }
+
+
     public boolean checkExistModule(int ID){
         Module module=moduleMapper.selectByPrimaryKey(ID);
         if (module==null || !module.getIsUserful()){
@@ -216,4 +256,5 @@ public class ModuleServiceImpl implements ModuleService {
         }
         return true;
     }
+
 }

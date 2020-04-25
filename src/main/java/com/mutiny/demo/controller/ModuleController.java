@@ -231,4 +231,49 @@ public class ModuleController {
         }
         return CommonResult.success(str);
     }
+
+    @MyLog(operation = "返回function中的变量名", database = "Module")
+    @ApiOperation(value = "返回function中的变量名")
+    @RequestMapping(value = "/getfunctions/{ModuleId}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getfunctions(@PathVariable int ModuleId){
+        List<String> str = null;
+        try {
+            str= moduleService.getfunctions(ModuleId);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "返回固定模型数据源信息", database = "Module")
+    @ApiOperation(value = "返回固定模型数据源信息")
+    @RequestMapping(value = "/getDefaultDataInfo/{defaultDateId}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getDefaultDataInfo(@PathVariable int defaultDateId){
+        DefaultData str = null;
+        try {
+            str= moduleService.getDefaultDataInfo(defaultDateId);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "返回计算完成的module信息", database = "Module")
+    @ApiOperation(value = "返回计算完成的moudle信息")
+    @RequestMapping(value = "/getCompleteModuleInfo", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getCompleteModuleInfo(){
+        List<ModuleInfoDTO> str = null;
+        try {
+            str= moduleService.getCompleteModuleInfo(GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
 }

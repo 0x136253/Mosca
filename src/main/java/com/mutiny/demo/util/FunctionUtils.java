@@ -473,7 +473,7 @@ public class FunctionUtils {
         return func;
     }
 
-    private Set<String> getIdentifiy(String function){
+    public static Set<String> getIdentifiy(String function){
         String pattern = "[a-zA-Z]+";
         Pattern r = Pattern.compile(pattern);
         Matcher matcher = r.matcher(function);

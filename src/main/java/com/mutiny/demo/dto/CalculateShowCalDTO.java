@@ -9,7 +9,6 @@ import javax.xml.crypto.Data;
 public class CalculateShowCalDTO {
     private String data;
     private int num;
-
     public String getData() {
         return data;
     }

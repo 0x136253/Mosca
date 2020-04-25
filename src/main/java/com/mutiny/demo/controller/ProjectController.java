@@ -182,7 +182,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectJoin(@PathVariable int currindex,@PathVariable int pagesize){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProject(GetUsername(),"join",0,currindex-1,pagesize);
+            str= projectService.getProject(GetUsername(),"parter",0,currindex-1,pagesize);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -197,7 +197,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectWatch(@PathVariable int currindex,@PathVariable int pagesize){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProject(GetUsername(),"watch",0,currindex-1,pagesize);
+            str= projectService.getProject(GetUsername(),"watcher",0,currindex-1,pagesize);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -228,7 +228,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectJoindefault(@PathVariable int currindex,@PathVariable int pagesize){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProject(GetUsername(),"join",1,currindex-1,pagesize);
+            str= projectService.getProject(GetUsername(),"parter",1,currindex-1,pagesize);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -243,7 +243,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectWatchdefault(@PathVariable int currindex,@PathVariable int pagesize){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProject(GetUsername(),"watch",1,currindex-1,pagesize);
+            str= projectService.getProject(GetUsername(),"watcher",1,currindex-1,pagesize);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -274,7 +274,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectJoinAll(){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProjectAll(GetUsername(),"join",0);
+            str= projectService.getProjectAll(GetUsername(),"parter",0);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -289,7 +289,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectWatchAll(){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProjectAll(GetUsername(),"watch",0);
+            str= projectService.getProjectAll(GetUsername(),"watcher",0);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -320,7 +320,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectJoindefaultAll(){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProjectAll(GetUsername(),"join",1);
+            str= projectService.getProjectAll(GetUsername(),"parter",1);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
@@ -335,7 +335,7 @@ public class ProjectController {
     public ResponseEntity<Map<String,Object>> getProjectWatchdefaultAll(){
         ProjectListDTO str = null;
         try {
-            str= projectService.getProjectAll(GetUsername(),"watch",1);
+            str= projectService.getProjectAll(GetUsername(),"watcher",1);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }

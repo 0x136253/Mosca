@@ -1,5 +1,7 @@
 package com.mutiny.demo.message;
 
+import java.util.Date;
+
 /**
  * @Author: Anonsmd
  * @Date: 2020/3/21 12:32
@@ -8,6 +10,7 @@ public class MessageInto {
     private String title;
     private String operator;
     private int messageId;
+    private Date time;
     private boolean isRead;
 
     @Override
@@ -16,6 +19,7 @@ public class MessageInto {
                 "title='" + title + '\'' +
                 ", operator='" + operator + '\'' +
                 ", messageId=" + messageId +
+                ", time=" + time +
                 ", isRead=" + isRead +
                 '}';
     }
@@ -28,6 +32,22 @@ public class MessageInto {
         this.operator = operator;
         this.messageId = messageId;
         this.isRead = isRead;
+    }
+
+    public MessageInto(String title, String operator, int messageId, Date time, boolean isRead) {
+        this.title = title;
+        this.operator = operator;
+        this.messageId = messageId;
+        this.time = time;
+        this.isRead = isRead;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public Date getTime() {
+        return time;
     }
 
     public int getMessageId() {

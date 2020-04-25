@@ -2,6 +2,7 @@ package com.mutiny.demo.Service.Impl;
 
 import com.mutiny.demo.Service.AdminService;
 import com.mutiny.demo.Service.Token_redisService;
+import com.mutiny.demo.component.PortraitComponent;
 import com.mutiny.demo.dao.CompanyMapper;
 import com.mutiny.demo.dao.GovernMapper;
 import com.mutiny.demo.dao.RoleMapper;
@@ -41,7 +42,8 @@ public class AdminServiceImpl implements AdminService {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private Token_redisService token_redisService;
-
+    @Autowired
+    private PortraitComponent portraitComponent;
     @Override
     public String login(String username, String password) throws Exception{
         AdminUserDetails userDetails = null;
@@ -229,6 +231,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Govern showGovern(int GovernId) throws Exception {
         return governMapper.selectByPrimaryKey(GovernId);
+    }
+
+    @Override
+    public String showPortrait(String username) throws Exception{
+        return "/image/"+portraitComponent.getImg(username);
     }
 
 //    @Override

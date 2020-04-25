@@ -41,7 +41,11 @@ public class MessageReceiver {
         List<MessageSend> messageSendList = getMessage(username);
         List<MessageInto> messageIntoList = new ArrayList<>();
         for (MessageSend record:messageSendList){
-            messageIntoList.add(new MessageInto(record.getMessageTitle(),record.getOperator(),record.getMessageSendId(),record.getStatus()));
+            if (record.getIsDel()){
+                continue;
+            }
+            MessageInfo messageInfo = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
+            messageIntoList.add(new MessageInto(record.getMessageTitle(),record.getOperator(),record.getMessageSendId(),messageInfo.getPushTime(),record.getStatus()));
         }
         return messageIntoList;
     }
@@ -61,16 +65,17 @@ public class MessageReceiver {
         if (record.getIsDel()){
             throw new Exception("No Such Message!");
         }
-        MessageDeta messageDeta = new MessageDeta(record.getMessageTitle(),record.getMessageText(),record.getMessageUrl(),record.getOperator(),record.getMessageSendId());
+        MessageInfo messageInfo = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
+        MessageDeta messageDeta = new MessageDeta(record.getMessageTitle(),record.getMessageText(),record.getMessageUrl(),record.getOperator(),record.getPushTime(),record.getMessageSendId());
         if (record.getStatus()){
             return messageDeta;
         }
         record.setPushTime(new Date());
         record.setStatus(true);
         messageSendMapper.updateByPrimaryKeySelective(record);
-        MessageInfo messageInfo = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
-        messageInfo.setnNum(messageInfo.getnNum()+1);
-        messageInfoMapper.updateByPrimaryKeySelective(messageInfo);
+        MessageInfo messageInfo2 = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
+        messageInfo.setnNum(messageInfo2.getnNum()+1);
+        messageInfoMapper.updateByPrimaryKeySelective(messageInfo2);
         return messageDeta;
     }
 
@@ -82,7 +87,8 @@ public class MessageReceiver {
         List<MessageSend> messageSendList = getMessage(username);
         List<MessageDeta> messageDetaList = new ArrayList<>();
         for (MessageSend record:messageSendList){
-            messageDetaList.add(new MessageDeta(record.getMessageTitle(),record.getMessageText(),record.getMessageUrl(),record.getOperator(),record.getMessageSendId()));
+            MessageInfo messageInfo = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
+            messageDetaList.add(new MessageDeta(record.getMessageTitle(),record.getMessageText(),record.getMessageUrl(),record.getOperator(),record.getPushTime(),record.getMessageSendId()));
             if (record.getStatus()){
                 continue;
             }
@@ -92,9 +98,9 @@ public class MessageReceiver {
             record.setPushTime(new Date());
             record.setStatus(true);
             messageSendMapper.updateByPrimaryKeySelective(record);
-            MessageInfo messageInfo = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
-            messageInfo.setnNum(messageInfo.getnNum()+1);
-            messageInfoMapper.updateByPrimaryKeySelective(messageInfo);
+            MessageInfo messageInfo2 = messageInfoMapper.selectByPrimaryKey(record.getMessageInfoId());
+            messageInfo.setnNum(messageInfo2.getnNum()+1);
+            messageInfoMapper.updateByPrimaryKeySelective(messageInfo2);
         }
         return messageDetaList;
     }

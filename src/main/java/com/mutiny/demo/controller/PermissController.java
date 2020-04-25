@@ -2,6 +2,7 @@ package com.mutiny.demo.controller;
 
 import com.mutiny.demo.Service.PermissService;
 import com.mutiny.demo.api.CommonResult;
+import com.mutiny.demo.api.MyLog;
 import com.mutiny.demo.dto.PermissRequestDTO;
 import com.mutiny.demo.dto.PermissionApplyDTO;
 import com.mutiny.demo.dto.ProjectListDTO;
@@ -54,6 +55,7 @@ public class PermissController {
      * @param InviteCode
      * @return
      */
+    @MyLog(operation = "参与者加入", database = "Module_User")
     @ApiOperation(value = "参与者加入")
     @RequestMapping(value = "/partJoin", method = RequestMethod.POST)
     @ResponseBody
@@ -69,6 +71,7 @@ public class PermissController {
         return CommonResult.success(str);
     }
 
+    @MyLog(operation = "旁观者加入", database = "Module_User")
     @ApiOperation(value = "旁观者加入")
     @RequestMapping(value = "/watchJoin", method = RequestMethod.POST)
     @ResponseBody
@@ -84,6 +87,9 @@ public class PermissController {
 //        return CommonResult.success("加入成功/加入失败");
     }
 
+
+
+    @MyLog(operation = "请求政府授权", database = "Module_User")
     @ApiOperation(value = "请求政府授权")
     @RequestMapping(value = "/govePermissRequest", method = RequestMethod.POST)
     @ResponseBody
@@ -105,6 +111,7 @@ public class PermissController {
      * @param
      * @return
      */
+    @MyLog(operation = "查看请求授权list", database = "Module_User")
     @ApiOperation(value = "查看请求授权list")
     @RequestMapping(value = "/showPermissGet", method = RequestMethod.GET)
     @ResponseBody
@@ -120,6 +127,7 @@ public class PermissController {
 //        return CommonResult.success(new ProjectListDTO());
     }
 
+    @MyLog(operation = "授权Api", database = "Module_User")
     @ApiOperation(value = "授权Api")
     @RequestMapping(value = "/pushAPi/{ID}/{status}", method = RequestMethod.GET)
     @ResponseBody

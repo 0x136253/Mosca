@@ -44,7 +44,16 @@ public class ModuleInfoDTO {
     private Date upTime;
     private Date createTime;
     private int status;
+    private String creater;
     private List<ModuleUploadInfoDTO> map;
+
+    public String getCreater() {
+        return creater;
+    }
+
+    public void setCreater(String creater) {
+        this.creater = creater;
+    }
 
     public ModuleInfoDTO() {
     }
@@ -62,7 +71,7 @@ public class ModuleInfoDTO {
         if (module.getParamNumber()!=null) {
             this.paramNumber=module.getParamNumber();
         }
-        if (module.getDescription()!=null) {
+        if (module.getDescription()!=null && module.getFunction()!=null) {
             this.map=showUploadNeed(module.getFunction(),module.getDescription());
         }
         if (module.getProjectId()!=null) {

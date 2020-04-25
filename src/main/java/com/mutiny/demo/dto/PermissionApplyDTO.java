@@ -10,6 +10,7 @@ public class PermissionApplyDTO {
     private int ID;
     private String ModuleName;
     private int defaultDataId;
+    private int defaultId;
     private String DataName;
     private int status;
     private Date applyDate;
@@ -20,16 +21,25 @@ public class PermissionApplyDTO {
     public PermissionApplyDTO() {
     }
 
-    public PermissionApplyDTO(int ID, String moduleName, int defaultDataId, String dataName, int status, Date applyDate, Date handleDate, int projectId, String companyName) {
+    public PermissionApplyDTO(int ID, String moduleName, int defaultDataId, int defaultId, String dataName, int status, Date applyDate, Date handleDate, int projectId, String companyName) {
         this.ID = ID;
         ModuleName = moduleName;
         this.defaultDataId = defaultDataId;
+        this.defaultId = defaultId;
         DataName = dataName;
         this.status = status;
         this.applyDate = applyDate;
         this.handleDate = handleDate;
         this.projectId = projectId;
         this.companyName = companyName;
+    }
+
+    public int getDefaultId() {
+        return defaultId;
+    }
+
+    public void setDefaultId(int defaultId) {
+        this.defaultId = defaultId;
     }
 
     public String getCompanyName() {

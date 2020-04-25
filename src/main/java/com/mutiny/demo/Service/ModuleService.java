@@ -24,4 +24,10 @@ public interface ModuleService {
     KeyDTO returnKey(int moduleId, boolean isDefaultId) throws Exception;
     List<ShowDefaultDataDTO> showDefaultData(String getUsername) throws Exception;
     ModuleInfoDTO getModule(int moduleId) throws Exception;
+
+    List<String> getfunctions(int moduleId) throws Exception;
+
+    DefaultData getDefaultDataInfo(int defaultDateId) throws Exception;
+
+    List<ModuleInfoDTO> getCompleteModuleInfo(String getUsername)throws Exception;
 }

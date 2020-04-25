@@ -15,5 +15,7 @@ public interface AdminService {
     User showme(String username) throws Exception;
     Company showCompany(int companyId) throws Exception;
     Govern showGovern(int GovernId) throws Exception;
+
+    String showPortrait(String username) throws Exception;
 //    boolean updatepassword(UpdatepasswordDTO updatepasswordDTO);
 }

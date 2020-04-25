@@ -2,14 +2,13 @@ package com.mutiny.demo.controller;
 
 import com.mutiny.demo.Service.CalculateLogService;
 import com.mutiny.demo.api.CommonResult;
-import com.mutiny.demo.dto.CalculateShowCalDTO;
+import com.mutiny.demo.dto.CalculateShowModuleDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,9 +33,9 @@ public class CalculateLogController {
     @ResponseBody
     @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
     public ResponseEntity<Map<String,Object>> showcal(@PathVariable int day){
-        List<CalculateShowCalDTO> answ = null;
+        List<CalculateShowModuleDTO> answ = null;
         try {
-            answ = calculateLogService.showansw(day);
+            answ = calculateLogService.showDefaultAnswAll(day,"answ");
         } catch (Exception e) {
             return CommonResult.failed(e.getMessage());
         }

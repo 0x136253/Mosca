@@ -11,6 +11,7 @@ import com.mutiny.demo.component.MessageRabbitMqSender;
 import com.mutiny.demo.dao.*;
 import com.mutiny.demo.dto.AdminUserDetails;
 import com.mutiny.demo.pojo.*;
+import com.mutiny.demo.util.CSVUtils;
 import com.mutiny.demo.util.GenerateTestUtils;
 import com.mutiny.demo.util.JwtTokenUtil;
 import com.mutiny.demo.util.RecursiveDescentUtils;
@@ -155,5 +156,30 @@ public class DemoApplicationTests {
             GenerateTestUtils.gen(defaultModule.getTfunction(),defaultModule.getChangefun(),keyFile.getFileurl(),defaultModule.getName());
 //            GenerateTestUtils.gen(defaultModule.getTfunction(),defaultModule.getChangefun(),keyFile.getFileurl(),defaultModule.getName());
         }
+    }
+
+    @Test
+    public void ModuleTest29(){
+        Key key = keyFileComponent.getKey(20);
+        Map<String,List<String>> map =CSVUtils.readCsvFile("/home/anon/下载/Module29Test.csv",-1);
+        Map<String,List<BigInteger>> numMap = new HashMap<>();
+        Set<String> keySet = map.keySet();
+        for(String str:keySet){
+            List<BigInteger> bigIntegerList = new ArrayList<>();
+            for (int i=0;i<map.get(str).size();i++){
+                bigIntegerList.add(new BigInteger(map.get(str).get(i)));
+            }
+            numMap.put(str,bigIntegerList);
+        }
+        keySet = numMap.keySet();
+        map = new HashMap<>();
+        for(String str:keySet){
+            List<String> stringArrayList = new ArrayList<>();
+            for (int i=0;i<numMap.get(str).size();i++){
+                stringArrayList.add(EncryptDecrypt.decryption(numMap.get(str).get(i),key).toString());
+            }
+            map.put(str,stringArrayList);
+        }
+        System.out.println(CSVUtils.writeCsvFile("/home/anon/下载/",map));
     }
 }

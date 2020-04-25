@@ -1,6 +1,6 @@
 package com.mutiny.demo.Service;
 
-import com.mutiny.demo.dto.CalculateShowCalDTO;
+import com.mutiny.demo.dto.CalculateShowModuleDTO;
 
 import java.util.List;
 
@@ -9,5 +9,7 @@ import java.util.List;
  * @Date: 2020/2/10 12:22
  */
 public interface CalculateLogService {
-    List<CalculateShowCalDTO> showansw(int day) throws Exception;
+    CalculateShowModuleDTO showansw(int day, int moduleId, String type, boolean isDefault) throws Exception;
+
+    List<CalculateShowModuleDTO> showDefaultAnswAll(int day, String answ) throws Exception;
 }

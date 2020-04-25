@@ -1,5 +1,7 @@
 package com.mutiny.demo.message;
 
+import java.util.Date;
+
 /**
  * @Author: Anonsmd
  * @Date: 2020/3/21 12:33
@@ -9,6 +11,7 @@ public class MessageDeta {
     private String text;
     private String messageUrl;
     private String operator;
+    private Date time;
     private int messageId;
 
     @Override
@@ -31,6 +34,23 @@ public class MessageDeta {
         this.messageUrl = messageUrl;
         this.operator = operator;
         this.messageId = messageId;
+    }
+
+    public MessageDeta(String title, String text, String messageUrl, String operator, Date time, int messageId) {
+        this.title = title;
+        this.text = text;
+        this.messageUrl = messageUrl;
+        this.operator = operator;
+        this.time = time;
+        this.messageId = messageId;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public int getMessageId() {

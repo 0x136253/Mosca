@@ -22,16 +22,36 @@ public class DefaultModuleDTO {
     private List<ModuleUploadInfoDTO> map;
 
     public DefaultModuleDTO(DefaultModule module) {
-        this.defaultId = module.getDefaultId();
-        this.name = module.getName();
-        this.function = module.getFunction();
-        this.paramNumber = module.getParamNumber();
-        this.tfunction = module.getTfunction();
-        this.changefun = module.getChangefun();
-        this.multnum = module.getMultnum();
-        this.isuserful = module.getIsuserful();
-        this.protocoldetails = module.getProtocoldetails();
-        this.map = showUploadNeed(getFunction(),module.getDescription());
+        if (module.getDefaultId()!=null) {
+            this.defaultId=module.getDefaultId();
+        }
+        if (module.getName()!=null) {
+            this.name=module.getName();
+        }
+        if (module.getFunction()!=null) {
+            this.function=module.getFunction();
+        }
+        if (module.getParamNumber()!=null) {
+            this.paramNumber=module.getParamNumber();
+        }
+        if (module.getTfunction()!=null) {
+            this.tfunction=module.getTfunction();
+        }
+        if (module.getChangefun()!=null) {
+            this.changefun=module.getChangefun();
+        }
+        if (module.getMultnum()!=null) {
+            this.multnum=module.getMultnum();
+        }
+        if (module.getIsuserful()!=null) {
+            this.isuserful=module.getIsuserful();
+        }
+        if (module.getProtocoldetails()!=null) {
+            this.protocoldetails=module.getProtocoldetails();
+        }
+        if (module.getDefaultId()!=null && module.getFunction()!=null) {
+            this.map = showUploadNeed(getFunction(),module.getDescription());
+        }
     }
 
     public DefaultModuleDTO(Integer defaultId, String name, String function, Integer paramNumber, String tfunction, String changefun, Integer multnum, Boolean isuserful, String protocoldetails, List<ModuleUploadInfoDTO> map) {
