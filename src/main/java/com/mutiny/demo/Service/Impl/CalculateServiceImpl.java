@@ -71,6 +71,9 @@ public class CalculateServiceImpl implements CalculateService {
         jsonObject.put("applicant",username);
 //        jsonObject.put("sendIp", AddressUtils.getV4IP());
         jsonObject.put("sendIp", AddressUtils.getInnetIp());
+        if(AddressUtils.getV4IP().equals("47.103.0.173")){
+            jsonObject.put("sendIp", AddressUtils.getV4IP());
+        }
 //        MessageSender messageSender = new MessageSender();
         messageRabbitMqSender.send(jsonObject,"MoscaDirectExchange","MoscaDirectRouting");
         return null;
@@ -106,6 +109,9 @@ public class CalculateServiceImpl implements CalculateService {
         jsonObject.put("applicant",username);
 //        jsonObject.put("sendIp", AddressUtils.getV4IP());
         jsonObject.put("sendIp", AddressUtils.getInnetIp());
+        if(AddressUtils.getV4IP().equals("47.103.0.173")){
+            jsonObject.put("sendIp", AddressUtils.getV4IP());
+        }
 //        MessageSender messageSender = new MessageSender();
         messageRabbitMqSender.send(jsonObject,"MoscaDirectExchange","MoscaDirectRouting");
         defaultData.setCaltime(new Date());

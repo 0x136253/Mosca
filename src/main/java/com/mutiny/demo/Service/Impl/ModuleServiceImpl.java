@@ -11,6 +11,8 @@ import com.mutiny.demo.util.FunctionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.Reader;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +35,8 @@ public class ModuleServiceImpl implements ModuleService {
     private ModuleUserMapper moduleUserMapper;
     @Autowired
     private ProjectUserMapper projectUserMapper;
+    @Autowired
+    private FileAnswerMapper fileAnswerMapper;
     @Autowired
     private KeyFileComponent keyFileComponent;
 
@@ -91,8 +95,76 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public String shouAnsw(int ModuleID) throws Exception {
-        return null;
+    public List<Map<String,String>> shouAnsw(int ModuleID,String username) throws Exception {
+        if (!checkExistModule(ModuleID)){
+            throw new Exception("Not Exist!!");
+        }
+        Module module = moduleMapper.selectByPrimaryKey(ModuleID);
+        ProjectUserExample projectUserExample =  new ProjectUserExample();
+        projectUserExample.createCriteria().andProjectIdEqualTo(module.getProjectId()).andUserIdEqualTo(username);
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        if (projectUserList.size()==0){
+            throw new  Exception("Your Have No Permission!");
+        }
+        if (!module.getIsCalculate()){
+            throw new  Exception("Calculate not complete");
+        }
+        if(!module.getIsUserful()){
+            throw new  Exception("Module not Userful");
+        }
+        FileAnswer fileAnswer;
+        List<FileAnswer> fileAnswerList = new ArrayList<>();
+        if (module.getIsDefault()){
+            DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(module.getDefaultmoduleId());
+            if (defaultData.getIsCalculate()){
+                throw new  Exception("DefaultData Answ File Not Exist,Calculate not complete");
+            }
+            else if(!defaultData.getIsUserful()){
+                throw new  Exception("Module not Userful");
+            }
+            fileAnswer = fileAnswerMapper.selectByPrimaryKey(defaultData.getFileaswid());
+        }
+        else{
+            FileAnswerExample fileAnswerExample = new FileAnswerExample();
+            fileAnswerExample.createCriteria().andModuleIdEqualTo(module.getModuleId());
+            fileAnswerList = fileAnswerMapper.selectByExample(fileAnswerExample);
+            if (fileAnswerList.size()==0){
+                module.setIsCalculate(false);
+                moduleMapper.updateByPrimaryKeySelective(module);
+                throw new  Exception("Module Answ File Not Exist,Calculate not complete");
+            }
+            fileAnswer = fileAnswerList.get(0);
+        }
+        String url = fileAnswer.getFileUrl();
+        url = pathHandle(url);
+        File file = new File(url);
+        if (!file.exists()){
+            module.setIsCalculate(false);
+            moduleMapper.updateByPrimaryKeySelective(module);
+            if (module.getIsDefault()){
+                DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(module.getDefaultmoduleId());
+                defaultData.setIsCalculate(false);
+                defaultDataMapper.updateByPrimaryKeySelective(defaultData);
+            }
+            for(FileAnswer records:fileAnswerList){
+                fileAnswerMapper.deleteByPrimaryKey(records.getFileId());
+            }
+            throw new  Exception("Can't Find AnswFile,Calculate May not complete");
+        }
+        Map<String, List<String>> map = CSVUtils.readCsvFile(url,-1);
+        List<Map<String,String>> answList = new ArrayList<>();
+        Set<String> keySet = map.keySet();
+        int length = map.get(keySet.iterator().next()).size();
+        for(int i=0;i<length;i++){
+            Map<String,String> tempMap = new HashMap<>();
+            tempMap.put("multNum",module.getMultnum().toString());
+            for(String str:keySet){
+                tempMap.put(str,map.get(str).get(i));
+            }
+            answList.add(tempMap);
+        }
+
+        return answList;
     }
 
     /**
@@ -102,10 +174,10 @@ public class ModuleServiceImpl implements ModuleService {
      */
     @Override
     public String delete(int ModuleID,String username) throws Exception {
-        Module module = moduleMapper.selectByPrimaryKey(ModuleID);
         if (!checkExistModule(ModuleID)){
             throw new Exception("Not Exist!!");
         }
+        Module module = moduleMapper.selectByPrimaryKey(ModuleID);
         if(!projectUserMapper.findCreater(module.getProjectId()).equals(username)){
             throw new  Exception("Your Have No Permission!");
         }
@@ -257,4 +329,22 @@ public class ModuleServiceImpl implements ModuleService {
         return true;
     }
 
+    public String pathHandle(String path){
+        if (path.startsWith("D://temp-rainy//")){
+            path =  path.substring(16,path.length());
+        }
+        else if (path.startsWith("/temp-rainy/")){
+            path = path.substring(12,path.length());
+        }
+        System.out.println(path);
+        String system = System.getProperty("os.name");
+        path=path.replaceAll("//","/");
+        if (system.startsWith("Windows")){
+            path = "D://temp-rainy//"+path;
+        }
+        else if (system.startsWith("Linux")){
+            path = "/temp-rainy/"+path;
+        }
+        return path;
+    }
 }

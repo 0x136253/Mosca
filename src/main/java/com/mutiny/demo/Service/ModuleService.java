@@ -6,6 +6,7 @@ import com.mutiny.demo.pojo.DefaultData;
 import com.mutiny.demo.pojo.DefaultModule;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Anonsmd
@@ -16,7 +17,7 @@ public interface ModuleService {
     List<DefaultData> defaultModuleData(int defaultID) throws Exception;
     List<DefaultModuleDTO> defaultModule() throws Exception;
     DefaultModuleDTO defaultModule(int DefaultId) throws Exception;
-    String shouAnsw(int ModuleID) throws Exception;
+    List<Map<String,String>> shouAnsw(int ModuleID,String username) throws Exception;
     String delete(int ModuleID,String username) throws Exception;
     String deleteDefaultData(int defaultDataId,String username) throws Exception;
     String deleteDefaultModule(int DefauleModuleID,String username) throws Exception;

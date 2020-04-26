@@ -20,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,14 +82,14 @@ public class CalculateController {
     }
 
     @MyCalLog(Type = "answ")
-    @ApiOperation(value = "查看结果[仅测试，无数据]")
+    @ApiOperation(value = "查看结果")
     @RequestMapping(value = "/shouAnsw/{ModuleID}", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
     public ResponseEntity<Map<String,Object>> shouAnsw(@PathVariable int ModuleID){
-        String str = null;
+        List<Map<String,String>> str = null;
         try {
-            str= moduleService.shouAnsw(ModuleID);
+            str= moduleService.shouAnsw(ModuleID,GetUsername());
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }
