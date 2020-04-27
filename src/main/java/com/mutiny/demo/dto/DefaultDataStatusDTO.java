@@ -6,6 +6,7 @@ public class DefaultDataStatusDTO {
     private String moduleName;
     private String dataName;
     private int defaultDataId;
+    private int defaultId;
     private Date createTime;
     private Date upTime;
     private int status;
@@ -13,19 +14,29 @@ public class DefaultDataStatusDTO {
     public DefaultDataStatusDTO() {
     }
 
-    public DefaultDataStatusDTO(String moduleName, String dataName, int defaultDataId, Date createTime, Date upTime, int status) {
+    public DefaultDataStatusDTO(String moduleName, String dataName, int defaultDataId, int defaultId, Date createTime, Date upTime, int status) {
         this.moduleName = moduleName;
         this.dataName = dataName;
         this.defaultDataId = defaultDataId;
+        this.defaultId = defaultId;
         this.createTime = createTime;
         this.upTime = upTime;
         this.status = status;
     }
 
-    public DefaultDataStatusDTO(String moduleName, String dataName, int defaultDataId) {
+    public int getDefaultId() {
+        return defaultId;
+    }
+
+    public void setDefaultId(int defaultId) {
+        this.defaultId = defaultId;
+    }
+
+    public DefaultDataStatusDTO(String moduleName, String dataName, int defaultDataId,int defaultId) {
         this.moduleName = moduleName;
         this.dataName = dataName;
         this.defaultDataId = defaultDataId;
+        this.defaultId = defaultId;
     }
 
     public String getModuleName() {

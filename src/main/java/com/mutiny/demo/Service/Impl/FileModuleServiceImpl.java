@@ -247,7 +247,7 @@ public class FileModuleServiceImpl implements FileModuleService {
             if (!defaultData.getIsUserful() || !defaultModule.getIsuserful()){
                 continue;
             }
-            DefaultDataStatusDTO defaultDataStatusDTO = new DefaultDataStatusDTO(defaultModule.getName(),defaultData.getDataName(),defaultData.getDefaultmoduleId());
+            DefaultDataStatusDTO defaultDataStatusDTO = new DefaultDataStatusDTO(defaultModule.getName(),defaultData.getDataName(),defaultData.getDefaultmoduleId(),defaultData.getDefaultId());
             if (defaultData.getCreatetime()!=null){
                 defaultDataStatusDTO.setCreateTime(defaultData.getCreatetime());
             }
