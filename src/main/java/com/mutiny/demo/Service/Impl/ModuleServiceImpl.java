@@ -304,6 +304,15 @@ public class ModuleServiceImpl implements ModuleService {
         return answ;
     }
 
+    @Override
+    public List<String> getfunctionsDefault(int defaultId) throws Exception {
+        if (!checkExistDefaultModule(defaultId)){
+            throw new Exception("Not Exist!!");
+        }
+        DefaultModule defaultModule = defaultModuleMapper.selectByPrimaryKey(defaultId);
+        return new ArrayList<>(FunctionUtils.getIdentifiy(defaultModule.getFunction()));
+    }
+
 
     public boolean checkExistModule(int ID){
         Module module=moduleMapper.selectByPrimaryKey(ID);

@@ -31,4 +31,6 @@ public interface ModuleService {
     DefaultData getDefaultDataInfo(int defaultDateId) throws Exception;
 
     List<ModuleInfoDTO> getCompleteModuleInfo(String getUsername)throws Exception;
+
+    List<String> getfunctionsDefault(int defaultId)throws Exception;
 }

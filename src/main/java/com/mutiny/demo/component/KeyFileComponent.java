@@ -39,9 +39,29 @@ public class KeyFileComponent {
         return keySize+1;
     }
 
+    public String pathHandle(String path){
+        if (path.startsWith("D://temp-rainy//")){
+            path =  path.substring(16,path.length());
+        }
+        else if (path.startsWith("/temp-rainy/")){
+            path = path.substring(12,path.length());
+        }
+        System.out.println(path);
+        String system = System.getProperty("os.name");
+        path=path.replaceAll("//","/");
+        if (system.startsWith("Windows")){
+            path = "D://temp-rainy//"+path;
+        }
+        else if (system.startsWith("Linux")){
+            path = "/temp-rainy/"+path;
+        }
+        return path;
+    }
+
+
     public Key getKey(int keyId){
         KeyFile keyFile = keyFileMapper.selectByPrimaryKey(keyId);
-        Map<String, List<String>> keyFileMap = CSVUtils.readCsvFile(keyFile.getFileurl(),-1);
+        Map<String, List<String>> keyFileMap = CSVUtils.readCsvFile(pathHandle(keyFile.getFileurl()),-1);
         Key key = new Key();
         key.P1 = new BigInteger(keyFileMap.get("P1").get(0));
         key.N = new BigInteger(keyFileMap.get("N").get(0));

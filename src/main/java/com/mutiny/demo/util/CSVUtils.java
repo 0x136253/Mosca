@@ -23,18 +23,27 @@ public class CSVUtils {
     public static Map<String, List<String>> readCsvFile(String filename,int num){
 //        File file = new File(filename);
         try {
+
             Reader in = new FileReader(filename);
+            in = new InputStreamReader(new FileInputStream(filename),"UTF-8");
             CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
             List<String> header = csvParser.getHeaderNames();
             Map<String,List<String> > map = new HashMap<>();
-            for (String str:header){
+            List<String> tempList = new ArrayList<>();
+            for(String str:header){
+                if (str.startsWith("\uFEFF")){
+                    str = str.replace("\uFEFF", "");
+                }else if (str.endsWith("\uFEFF")){
+                    str = str.replace("\uFEFF","");
+                }
+                tempList.add(str);
                 map.put(str,new ArrayList<>());
             }
             Iterable<CSVRecord> records = csvParser;
             for (CSVRecord record: records){
                 num--;
-                for (String str:header){
-                    map.get(str).add(record.get(str));
+                for (int i=0;i<header.size();i++){
+                    map.get(tempList.get(i)).add(record.get(header.get(i)));
                 }
                 if (num == 0){
                     return  map;

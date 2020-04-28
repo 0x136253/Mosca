@@ -232,8 +232,8 @@ public class ModuleController {
         return CommonResult.success(str);
     }
 
-    @MyLog(operation = "返回function中的变量名", database = "Module")
-    @ApiOperation(value = "返回function中的变量名")
+    @MyLog(operation = "返回function中的变量名(自定义模型)", database = "Module")
+    @ApiOperation(value = "返回function中的变量名(自定义模型)")
     @RequestMapping(value = "/getfunctions/{ModuleId}", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
@@ -241,6 +241,21 @@ public class ModuleController {
         List<String> str = null;
         try {
             str= moduleService.getfunctions(ModuleId);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "返回function中的变量名(固定模型)", database = "Default_module")
+    @ApiOperation(value = "返回function中的变量名(固定模型)")
+    @RequestMapping(value = "/getfunctionsDefault/{DefaultId}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getfunctionsDefault(@PathVariable int DefaultId){
+        List<String> str = null;
+        try {
+            str= moduleService.getfunctionsDefault(DefaultId);
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }

@@ -160,7 +160,8 @@ public class FileModuleServiceImpl implements FileModuleService {
         Iterator<String> keySetIte = keySet.iterator();
         int countKeySize =0 ;
         while(keySetIte.hasNext()){
-            if (keySetIte.next().length()==1){
+            String str = keySetIte.next();
+            if (str.length()==1){
                 countKeySize++;
             }
         }
@@ -391,7 +392,7 @@ public class FileModuleServiceImpl implements FileModuleService {
         }
     }
 
-    private boolean checkIsFull(int moduleId, boolean isDefault) {
+    private boolean checkIsFull(int moduleId, boolean isDefault) throws Exception{
         int totleID;
         if (isDefault){
             int defaultModuleID = defaultDataMapper.selectByPrimaryKey(moduleId).getDefaultId();
@@ -422,7 +423,18 @@ public class FileModuleServiceImpl implements FileModuleService {
         }
         else{
             // big
-            return false;
+            FileModuleTempExample fileModuleTempExample = new FileModuleTempExample();
+            if (isDefault){
+                fileModuleTempExample.createCriteria().andIsDefaultEqualTo(isDefault).andDefaultidEqualTo(moduleId);
+            }
+            else{
+                fileModuleTempExample.createCriteria().andIsDefaultEqualTo(isDefault).andModuleIdEqualTo(moduleId);
+            }
+            List<FileModuleTemp> temps = fileModuleTempMapper.selectByExample(fileModuleTempExample);
+            for (FileModuleTemp re:temps){
+                fileModuleTempMapper.deleteByPrimaryKey(re.getFileId());
+            }
+            throw new Exception("Something Wrong With This Module,All Records Hava Been Delete,Please Upload Again");
         }
 //        return false;
     }
