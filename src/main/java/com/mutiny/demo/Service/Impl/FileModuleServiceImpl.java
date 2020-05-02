@@ -281,11 +281,12 @@ public class FileModuleServiceImpl implements FileModuleService {
             moduleExample.clear();
             moduleExample.createCriteria().andProjectIdEqualTo(project.getProjectId()).andIsUserfulEqualTo(true);
             List<Module> moduleList = moduleMapper.selectByExample(moduleExample);
-            ModuleStatusDTO moduleStatusDTO = new ModuleStatusDTO();
+
             if (moduleList.size()==0){
                 continue;
             }
             for (Module res:moduleList){
+                ModuleStatusDTO moduleStatusDTO = new ModuleStatusDTO();
                 moduleStatusDTO.setModuleId(res.getModuleId());
                 moduleStatusDTO.setModuleName(res.getModuleName());
                 moduleStatusDTO.setProjectId(record.getProjectId());
@@ -299,8 +300,84 @@ public class FileModuleServiceImpl implements FileModuleService {
                 if (res.getStatus()!=null) {
                     moduleStatusDTO.setStatus(res.getStatus());
                 }
+                answ.add(moduleStatusDTO);
             }
-            answ.add(moduleStatusDTO);
+        }
+        return answ;
+    }
+
+    @Override
+    public List<DefaultDataStatusDTO> showReadyCal_Gover(String getUsername) throws Exception {
+        ModuleUserExample moduleUserExample = new ModuleUserExample();
+        moduleUserExample.createCriteria().andTypeEqualTo("uploader").andUserIdEqualTo(getUsername);
+        List<ModuleUser> moduleUsers = moduleUserMapper.selectByExample(moduleUserExample);
+        List<DefaultDataStatusDTO> answ = new ArrayList<>();
+        for (ModuleUser record:moduleUsers){
+            DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(record.getModuleId());
+            DefaultModule defaultModule = defaultModuleMapper.selectByPrimaryKey(defaultData.getDefaultId());
+            if (!defaultData.getIsUserful() || !defaultModule.getIsuserful()){
+                continue;
+            }
+            if (defaultData.getFileId()==null || defaultData.getFileId()==0){
+                continue;
+            }
+            DefaultDataStatusDTO defaultDataStatusDTO = new DefaultDataStatusDTO(defaultModule.getName(),defaultData.getDataName(),defaultData.getDefaultmoduleId(),defaultData.getDefaultId());
+            if (defaultData.getCreatetime()!=null){
+                defaultDataStatusDTO.setCreateTime(defaultData.getCreatetime());
+            }
+            if (defaultData.getUptime()!=null){
+                defaultDataStatusDTO.setUpTime(defaultData.getUptime());
+            }
+            if (defaultData.getStatus()!=null){
+                defaultDataStatusDTO.setStatus(defaultData.getStatus());
+            }
+            answ.add(defaultDataStatusDTO);
+        }
+        return answ;
+    }
+
+    @Override
+    public List<ModuleStatusDTO> showReadyCal_Comp(String getUsername) throws Exception {
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andUserIdEqualTo(getUsername);
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        List<ModuleStatusDTO> answ = new ArrayList<>();
+        for (ProjectUser record:projectUserList){
+            if (record.getType().equals("user")){
+                continue;
+            }
+            Project project = projectMapper.selectByPrimaryKey(record.getProjectId());
+            if (project.getIsDefault() || !project.getIsUserful()){
+                continue;
+            }
+            ModuleExample moduleExample = new ModuleExample();
+            moduleExample.clear();
+            moduleExample.createCriteria().andProjectIdEqualTo(project.getProjectId()).andIsUserfulEqualTo(true);
+            List<Module> moduleList = moduleMapper.selectByExample(moduleExample);
+
+            if (moduleList.size()==0){
+                continue;
+            }
+            for (Module res:moduleList){
+                if (!CheckIfModuleReadyCal(res)){
+                    continue;
+                }
+                ModuleStatusDTO moduleStatusDTO = new ModuleStatusDTO();
+                moduleStatusDTO.setModuleId(res.getModuleId());
+                moduleStatusDTO.setModuleName(res.getModuleName());
+                moduleStatusDTO.setProjectId(record.getProjectId());
+                moduleStatusDTO.setProjectName(project.getProjectName());
+                if (res.getCreatetime()!=null) {
+                    moduleStatusDTO.setCreateTime(res.getCreatetime());
+                }
+                if (res.getUptime()!=null) {
+                    moduleStatusDTO.setUpTime(res.getUptime());
+                }
+                if (res.getStatus()!=null) {
+                    moduleStatusDTO.setStatus(res.getStatus());
+                }
+                answ.add(moduleStatusDTO);
+            }
 
         }
         return answ;
@@ -453,5 +530,14 @@ public class FileModuleServiceImpl implements FileModuleService {
             return false;
         }
         return true;
+    }
+
+    private boolean CheckIfModuleReadyCal(Module module){
+        FileModuleExample fileModuleExample = new FileModuleExample();
+        fileModuleExample.createCriteria().andModuleIdEqualTo(module.getModuleId());
+        if(fileModuleMapper.selectByExample(fileModuleExample).size()>=1){
+            return true;
+        }
+        return false;
     }
 }

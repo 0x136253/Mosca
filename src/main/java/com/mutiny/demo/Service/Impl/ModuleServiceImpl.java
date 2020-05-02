@@ -313,6 +313,64 @@ public class ModuleServiceImpl implements ModuleService {
         return new ArrayList<>(FunctionUtils.getIdentifiy(defaultModule.getFunction()));
     }
 
+    @Override
+    public Map<String, Object> shoucalInfo(boolean isdefault, int moduleID, String getUsername) throws Exception {
+        Map<String,Object> answMap = new HashMap<>();
+        if(isdefault){
+            DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(moduleID);
+            if (defaultData==null || !defaultData.getIsUserful()){
+                throw new Exception("Not Exist!!");
+            }
+            Date startTime = null;
+            if (defaultData.getCaltime()==null){
+                throw new Exception("Calculate Not Start!!");
+            }
+            else{
+                startTime = defaultData.getCaltime();
+            }
+            answMap.put("StartTime",startTime);
+            Date endTime = null;
+            if (defaultData.getCompletetime()!=null){
+                endTime = defaultData.getCompletetime();
+                answMap.put("Precent","90%");
+                answMap.put("EstimateTime",endTime);
+//                answMap.put("EstimateTime",new Date(System.currentTimeMillis()+3600*1000));
+            }
+            else{
+                answMap.put("Precent","0%");
+                answMap.put("EstimateTime",new Date(System.currentTimeMillis()+3600*1000));
+            }
+            answMap.put("EndTime",endTime);
+        }
+        else{
+            Module module = moduleMapper.selectByPrimaryKey(moduleID);
+            if (module==null || !module.getIsUserful()){
+                throw new Exception("Not Exist!!");
+            }
+            Date startTime = null;
+            if (module.getCaltime()==null){
+                throw new Exception("Calculate Not Start!!");
+            }
+            else{
+                startTime = module.getCaltime();
+            }
+            answMap.put("StartTime",startTime);
+            Date endTime = null;
+            if (module.getCompletetime()!=null){
+                endTime = module.getCompletetime();
+                answMap.put("Precent","90%");
+                answMap.put("EstimateTime",endTime);
+//                answMap.put("EstimateTime",new Date(System.currentTimeMillis()));
+            }
+            else{
+                answMap.put("Precent","0%");
+                answMap.put("EstimateTime",new Date(System.currentTimeMillis()+3600*1000));
+            }
+            answMap.put("EndTime",endTime);
+        }
+        return answMap;
+    }
+
 
     public boolean checkExistModule(int ID){
         Module module=moduleMapper.selectByPrimaryKey(ID);

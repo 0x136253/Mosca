@@ -16,4 +16,9 @@ public interface FileModuleService {
     List<ModuleUploadInfoDTO> showUploadNeed(String username, int moduleId, boolean isDefault) throws Exception;
     List<DefaultDataStatusDTO> showDefaultDataStatus(String username) throws Exception;
     List<ModuleStatusDTO> showModuleStatus(String getUsername) throws Exception;
+
+    List<DefaultDataStatusDTO> showReadyCal_Gover(String getUsername) throws Exception;
+
+    List<ModuleStatusDTO> showReadyCal_Comp(String getUsername)throws Exception;
+
 }

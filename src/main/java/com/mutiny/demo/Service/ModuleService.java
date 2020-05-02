@@ -33,4 +33,6 @@ public interface ModuleService {
     List<ModuleInfoDTO> getCompleteModuleInfo(String getUsername)throws Exception;
 
     List<String> getfunctionsDefault(int defaultId)throws Exception;
+
+    Map<String, Object> shoucalInfo(boolean isdefault, int moduleID, String getUsername)throws Exception;
 }

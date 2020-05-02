@@ -1,27 +1,27 @@
 package com.mutiny.demo.controller;
 
-import com.mutiny.demo.Service.CalculateService;
-import com.mutiny.demo.Service.ModuleService;
-import com.mutiny.demo.api.CommonResult;
-import com.mutiny.demo.api.MyCalLog;
-import com.mutiny.demo.api.MyLog;
-import com.mutiny.demo.dto.UserLoginDTO;
-import com.mutiny.demo.util.JwtTokenUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+        import com.mutiny.demo.Service.CalculateService;
+        import com.mutiny.demo.Service.ModuleService;
+        import com.mutiny.demo.api.CommonResult;
+        import com.mutiny.demo.api.MyCalLog;
+        import com.mutiny.demo.api.MyLog;
+        import com.mutiny.demo.dto.UserLoginDTO;
+        import com.mutiny.demo.util.JwtTokenUtil;
+        import io.swagger.annotations.Api;
+        import io.swagger.annotations.ApiOperation;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.beans.factory.annotation.Value;
+        import org.springframework.http.ResponseEntity;
+        import org.springframework.security.access.prepost.PreAuthorize;
+        import org.springframework.stereotype.Controller;
+        import org.springframework.web.bind.annotation.*;
+        import org.springframework.web.context.request.RequestContextHolder;
+        import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+        import javax.servlet.http.HttpServletRequest;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
 
 /**
  * @Author: Anonsmd
@@ -90,6 +90,21 @@ public class CalculateController {
         List<Map<String,String>> str = null;
         try {
             str= moduleService.shouAnsw(ModuleID,GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "查看计算完成情况",database = "Module,DefaultData")
+    @ApiOperation(value = "查看计算完成情况(Isdefault = true,ModuleId为数据源Id；Isdefault = false,ModuleId为模型Id)")
+    @RequestMapping(value = "/shoucalInfo/{Isdefault}/{ModuleID}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> shoucalInfo(@PathVariable boolean Isdefault,@PathVariable int ModuleID){
+        Map<String, Object> str = null;
+        try {
+            str= moduleService.shoucalInfo(Isdefault,ModuleID,GetUsername());
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }

@@ -171,6 +171,37 @@ public class FileModuleController {
     }
 
 
+    @MyLog(operation = "返回待计算的任务，政府",database = "DefaultModulem,DefaultData")
+    @ApiOperation(value = "返回待计算的任务，政府")
+    @GetMapping(value = "/showReadyCalGover")
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> showReadyCal_Gover(){
+        List<DefaultDataStatusDTO> str = null;
+        try {
+            str= fileModuleService.showReadyCal_Gover(GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+//        return CommonResult.success(fileModuleService.show(DefaultDataID,true));
+    }
+
+    @MyLog(operation = "返回待计算的任务，企业",database = "DefaultModulem,DefaultData")
+    @ApiOperation(value = "返回待计算的任务，企业")
+    @GetMapping(value = "/showReadyCalComp")
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('GOVER','ADMIN','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> showReadyCal_Comp(){
+        List<ModuleStatusDTO> str = null;
+        try {
+            str= fileModuleService.showReadyCal_Comp(GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+//        return CommonResult.success(fileModuleService.show(DefaultDataID,true));
+    }
 
     @MyLog(operation = "获取数据源状态，企业",database = "DefaultModulem,DefaultData")
     @ApiOperation(value = "获取数据源状态，企业")

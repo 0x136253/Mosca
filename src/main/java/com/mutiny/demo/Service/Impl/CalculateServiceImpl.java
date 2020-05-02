@@ -9,6 +9,7 @@ import com.mutiny.demo.util.AddressUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,6 +38,8 @@ public class CalculateServiceImpl implements CalculateService {
     private ProjectUserMapper projectUserMapper;
     @Autowired
     private ModuleUserMapper moduleUserMapper;
+    @Autowired
+    private ProjectMapper projectMapper;
     @Override
     public String calModule(int moduleID,String username) throws Exception {
         Module module = moduleMapper.selectByPrimaryKey(moduleID);
@@ -76,7 +79,9 @@ public class CalculateServiceImpl implements CalculateService {
         }
 //        MessageSender messageSender = new MessageSender();
         messageRabbitMqSender.send(jsonObject,"MoscaDirectExchange","MoscaDirectRouting");
-        return null;
+        module.setCaltime(new Date());
+        moduleMapper.updateByPrimaryKeySelective(module);
+        return "null";
     }
 
     @Override
@@ -116,7 +121,7 @@ public class CalculateServiceImpl implements CalculateService {
         messageRabbitMqSender.send(jsonObject,"MoscaDirectExchange","MoscaDirectRouting");
         defaultData.setCaltime(new Date());
         defaultDataMapper.updateByPrimaryKeySelective(defaultData);
-        return null;
+        return "null";
     }
 
 
@@ -126,7 +131,9 @@ public class CalculateServiceImpl implements CalculateService {
             uploader = moduleUserMapper.findCreater(Id);
         }
         else {
-            uploader = projectUserMapper.findCreater(Id);
+            Module module = moduleMapper.selectByPrimaryKey(Id);
+            Project project = projectMapper.selectByPrimaryKey(module.getProjectId());
+            uploader = projectUserMapper.findCreater(project.getProjectId());
         }
         if (!uploader.equals(username)){
             return false;
