@@ -96,15 +96,30 @@ public class CalculateController {
         return CommonResult.success(str);
     }
 
-    @MyLog(operation = "查看计算完成情况",database = "Module,DefaultData")
-    @ApiOperation(value = "查看计算完成情况(Isdefault = true,ModuleId为数据源Id；Isdefault = false,ModuleId为模型Id)")
-    @RequestMapping(value = "/shoucalInfo/{Isdefault}/{ModuleID}", method = RequestMethod.GET)
+    @MyLog(operation = "查看计算完成情况(ALL)",database = "Module,DefaultData")
+    @ApiOperation(value = "查看计算完成情况(根据moduleId对应的模型情况返回固定模型或者自定义模型)")
+    @RequestMapping(value = "/shoucalInfo/{ModuleID}", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
-    public ResponseEntity<Map<String,Object>> shoucalInfo(@PathVariable boolean Isdefault,@PathVariable int ModuleID){
+    public ResponseEntity<Map<String,Object>> shoucalInfo(@PathVariable int ModuleID){
         Map<String, Object> str = null;
         try {
-            str= moduleService.shoucalInfo(Isdefault,ModuleID,GetUsername());
+            str= moduleService.shoucalInfo(ModuleID,GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "查看计算完成情况(固定模型)",database = "Module,DefaultData")
+    @ApiOperation(value = "查看计算完成情况(固定模型)")
+    @RequestMapping(value = "/shoucalInfoDefualt/{DefaultDataId}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> shoucalInfoDefualt(@PathVariable int DefaultDataId){
+        Map<String, Object> str = null;
+        try {
+            str= moduleService.shoucalInfoDefualt(DefaultDataId,GetUsername());
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }

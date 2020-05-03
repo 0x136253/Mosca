@@ -34,5 +34,7 @@ public interface ModuleService {
 
     List<String> getfunctionsDefault(int defaultId)throws Exception;
 
-    Map<String, Object> shoucalInfo(boolean isdefault, int moduleID, String getUsername)throws Exception;
+    Map<String, Object> shoucalInfo(int moduleID, String getUsername)throws Exception;
+
+    Map<String, Object> shoucalInfoDefualt(int defaultDataId, String username)throws Exception;
 }
