@@ -3,11 +3,9 @@ package com.mutiny.demo.Service.Impl;
 import com.mutiny.demo.Service.AdminService;
 import com.mutiny.demo.Service.Token_redisService;
 import com.mutiny.demo.component.PortraitComponent;
-import com.mutiny.demo.dao.CompanyMapper;
-import com.mutiny.demo.dao.GovernMapper;
-import com.mutiny.demo.dao.RoleMapper;
-import com.mutiny.demo.dao.UserMapper;
+import com.mutiny.demo.dao.*;
 import com.mutiny.demo.dto.AdminUserDetails;
+import com.mutiny.demo.dto.UserCheckDTO;
 import com.mutiny.demo.pojo.*;
 import com.mutiny.demo.util.JwtTokenUtil;
 import org.slf4j.Logger;
@@ -19,9 +17,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,12 +43,17 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private Token_redisService token_redisService;
     @Autowired
+    private FileOtherMapper fileOtherMapper;
+    @Autowired
     private PortraitComponent portraitComponent;
     @Override
     public String login(String username, String password) throws Exception{
         AdminUserDetails userDetails = null;
 //        try {
             User user = userMapper.selectByPrimaryKey(username);
+            if(!user.getIsPass()){
+                throw new UsernameNotFoundException("账户未审核");
+            }
             if(user == null){
                 throw new BadCredentialsException("账户或密码不正确");
             }
@@ -138,6 +143,7 @@ public class AdminServiceImpl implements AdminService {
         umsAdmin.setCompanyid(company1.getCompanyid());
         umsAdmin.setPassword(encodePassword);
         userMapper.insertSelective(umsAdmin);
+        umsAdmin.setIsPass(true);
         Role role=new Role();
         role.setCreateTime(new Date());
         role.setUserId(umsAdmin.getId());
@@ -238,6 +244,80 @@ public class AdminServiceImpl implements AdminService {
         return "/image/"+portraitComponent.getImg(username);
     }
 
+    @Override
+    public List<UserCheckDTO> showUserNotPass() throws Exception {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIsPassEqualTo(false);
+        List<User> userList = userMapper.selectByExample(userExample);
+        List<UserCheckDTO> answ = new ArrayList<>();
+        for(User record:userList){
+            if (record.getType()==null){
+                continue;
+            }
+            if (record.getType().equals("企业管理员") || record.getType().equals("政府")){
+                answ.add(getUserCheck(record));
+            }
+        }
+        return answ;
+    }
+
+    @Override
+    public String changeUserCheck(String username, boolean pos) throws Exception {
+        User user = userMapper.selectByPrimaryKey(username);
+        if (user == null){
+            throw new Exception("User not exist");
+        }
+        user.setIsPass(pos);
+        userMapper.updateByPrimaryKeySelective(user);
+        return "Success";
+    }
+
+    private UserCheckDTO getUserCheck(User user) throws Exception {
+        if (!user.getType().equals("企业管理员") && !user.getType().equals("政府")){
+            throw new Exception("Type Error");
+        }
+        if (user.getType().equals("企业管理员")){
+            Company company = companyMapper.selectByPrimaryKey(user.getCompanyid());
+            if (company == null){
+                throw new Exception("company not exist");
+            }
+            FileOther fileOther = fileOtherMapper.selectByPrimaryKey(company.getFileid());
+            String pUrl = portraitComponent.getImg(user.getId());
+            return new UserCheckDTO(user,"/image/"+pUrl,company.getName(),fileOther.getFileId(),"/image/"+pathHandle(fileOther.getFileUrl()));
+        }
+        else if (user.getType().equals("政府")){
+            Govern govern = governMapper.selectByPrimaryKey(user.getGovernid());
+            if (govern == null){
+                throw new Exception("govern not exist");
+            }
+            FileOther fileOther = fileOtherMapper.selectByPrimaryKey(govern.getFileid());
+            String pUrl = portraitComponent.getImg(user.getId());
+            return new UserCheckDTO(user,"/image/"+pUrl,govern.getName(),fileOther.getFileId(),"/image/"+pathHandle(fileOther.getFileUrl()));
+        }
+        throw new Exception("Something Error");
+    }
+
+    public String pathHandle(String path){
+        if (path == null){
+            return path;
+        }
+        if (path.startsWith("D://temp-rainy//")){
+            path =  path.substring(16,path.length());
+        }
+        else if (path.startsWith("/temp-rainy/")){
+            path = path.substring(12,path.length());
+        }
+        System.out.println(path);
+//        String system = System.getProperty("os.name");
+//        path=path.replaceAll("//","/");
+//        if (system.startsWith("Windows")){
+//            path = "D://temp-rainy//"+path;
+//        }
+//        else if (system.startsWith("Linux")){
+//            path = "/temp-rainy/"+path;
+//        }
+        return path;
+    }
 //    @Override
 //    public boolean updatepassword(UpdatepasswordDTO updatepasswordDTO) {
 //        token_redisService.delete(updatepasswordDTO.getUsername());

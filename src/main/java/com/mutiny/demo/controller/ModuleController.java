@@ -291,4 +291,34 @@ public class ModuleController {
         }
         return CommonResult.success(str);
     }
+
+    @MyLog(operation = "返回固定模型管理所需数据", database = "Module")
+    @ApiOperation(value = "返回固定模型管理所需数据")
+    @RequestMapping(value = "/getDefaultManager", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getDefaultManager(){
+        List<DefaultModuleManagerDTO> str = null;
+        try {
+            str= moduleService.getDefaultManager();
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "更改固定模型状态", database = "Module")
+    @ApiOperation(value = "更改固定模型状态(DefaultId 为 固定模型ID，pos位true则部署模型，为false则卸载模型)")
+    @RequestMapping(value = "/changeDefaultManager/{DefaultId}/{pos}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('SYSTEM')")
+    public ResponseEntity<Map<String,Object>> changeDefaultManager(@PathVariable int DefaultId,@PathVariable boolean pos){
+        String str = null;
+        try {
+            str= moduleService.changeDefaultManager(DefaultId,pos);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
 }

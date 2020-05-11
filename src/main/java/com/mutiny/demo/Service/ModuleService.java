@@ -37,4 +37,8 @@ public interface ModuleService {
     Map<String, Object> shoucalInfo(int moduleID, String getUsername)throws Exception;
 
     Map<String, Object> shoucalInfoDefualt(int defaultDataId, String username)throws Exception;
+
+    List<DefaultModuleManagerDTO> getDefaultManager()throws Exception;
+
+    String changeDefaultManager(int defaultId, boolean pos)throws Exception;
 }

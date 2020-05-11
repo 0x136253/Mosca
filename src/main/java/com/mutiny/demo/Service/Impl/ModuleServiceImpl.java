@@ -371,7 +371,51 @@ public class ModuleServiceImpl implements ModuleService {
         return getCalInfoTime(startTime,endTIme);
     }
 
+    @Override
+    public List<DefaultModuleManagerDTO> getDefaultManager() throws Exception {
+        List<DefaultModuleManagerDTO> answ = new ArrayList<>();
+        DefaultModuleExample defaultModuleExample = new DefaultModuleExample();
+        defaultModuleExample.createCriteria();
+        List<DefaultModule> defaultModuleList = defaultModuleMapper.selectByExample(defaultModuleExample);
+        for (DefaultModule record:defaultModuleList){
+            int dataNum = getDataNumByDefaultModule(record);
+            int projectNum = getprojectNumByDefaultModule(record);
+            answ.add(new DefaultModuleManagerDTO(record,dataNum,projectNum));
+        }
+        return answ;
+    }
 
+    @Override
+    public String changeDefaultManager(int defaultId, boolean pos) throws Exception {
+        DefaultModule defaultModule = defaultModuleMapper.selectByPrimaryKey(defaultId);
+        if (defaultModule == null){
+            throw new Exception("DefaultModule not exist");
+        }
+        defaultModule.setIsuserful(pos);
+        defaultModuleMapper.updateByPrimaryKey(defaultModule);
+        return "Success";
+    }
+
+    private  int getprojectNumByDefaultModule(DefaultModule defaultModule){
+        int answ = 0;
+        DefaultDataExample defaultDataExample = new DefaultDataExample();
+        defaultDataExample.createCriteria().andDefaultIdEqualTo(defaultModule.getDefaultId()).andIsUserfulEqualTo(true);
+        List<DefaultData> defaultDataList = defaultDataMapper.selectByExample(defaultDataExample);
+        for (DefaultData record:defaultDataList){
+            ModuleExample moduleExample = new ModuleExample();
+            moduleExample.createCriteria().andIsDefaultEqualTo(true).andDefaultmoduleIdEqualTo(record.getDefaultmoduleId());
+            answ = answ + moduleMapper.selectByExample(moduleExample).size();
+        }
+        return answ;
+    }
+
+    private  int getDataNumByDefaultModule(DefaultModule defaultModule){
+        int answ = 0;
+        DefaultDataExample defaultDataExample = new DefaultDataExample();
+        defaultDataExample.createCriteria().andDefaultIdEqualTo(defaultModule.getDefaultId()).andIsUserfulEqualTo(true);
+        answ = defaultDataMapper.selectByExample(defaultDataExample).size();
+        return answ;
+    }
     public boolean checkExistModule(int ID){
         Module module=moduleMapper.selectByPrimaryKey(ID);
         if (module==null || !module.getIsUserful()){

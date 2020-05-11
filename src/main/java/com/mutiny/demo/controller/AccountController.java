@@ -3,10 +3,7 @@ package com.mutiny.demo.controller;
 import com.mutiny.demo.Service.AdminService;
 import com.mutiny.demo.api.CommonResult;
 import com.mutiny.demo.api.MyLog;
-import com.mutiny.demo.dto.UserLoginDTO;
-import com.mutiny.demo.dto.UserRegisterAdminDTO;
-import com.mutiny.demo.dto.UserRegisterGoverDTO;
-import com.mutiny.demo.dto.UserRegisterUserDTO;
+import com.mutiny.demo.dto.*;
 import com.mutiny.demo.pojo.Company;
 import com.mutiny.demo.pojo.Govern;
 import com.mutiny.demo.pojo.User;
@@ -25,6 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -169,6 +167,38 @@ public class AccountController {
         try {
             user = adminService.register_user(userRegisterUserDTO.ToUser(),userRegisterUserDTO.getCompany());
         } catch (Exception e) {
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
+    @MyLog(operation = "获取待审核名单",database = "User")
+    @ApiOperation(value = "获取待审核名单")
+    @RequestMapping(value = "/getUserCheck", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getUserCheck(){
+        List<UserCheckDTO> user = null;
+        try {
+            user = adminService.showUserNotPass();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
+    @MyLog(operation = "更改审核状态",database = "User")
+    @ApiOperation(value = "更改审核状态(username为用户Id，pos为true则通过审核，为false则不通过审核)")
+    @RequestMapping(value = "/changeUserCheck/{username}/{pos}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('SYSTEM')")
+    public ResponseEntity<Map<String,Object>> changeUserCheck(@PathVariable String username,@PathVariable boolean pos){
+        String user = null;
+        try {
+            user = adminService.changeUserCheck(username,pos);
+        } catch (Exception e) {
+            e.printStackTrace();
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(user);

@@ -1,8 +1,11 @@
 package com.mutiny.demo.Service;
 
+import com.mutiny.demo.dto.UserCheckDTO;
 import com.mutiny.demo.pojo.Company;
 import com.mutiny.demo.pojo.Govern;
 import com.mutiny.demo.pojo.User;
+
+import java.util.List;
 
 public interface AdminService {
 
@@ -18,4 +21,7 @@ public interface AdminService {
 
     String showPortrait(String username) throws Exception;
 //    boolean updatepassword(UpdatepasswordDTO updatepasswordDTO);
+    List<UserCheckDTO> showUserNotPass() throws Exception;
+
+    String changeUserCheck(String username, boolean pos) throws Exception;
 }

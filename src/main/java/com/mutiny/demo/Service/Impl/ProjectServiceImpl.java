@@ -202,6 +202,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectCompleteDTO getIsEnd(String username)  throws Exception{
         ProjectCompleteDTO projectCompleteDTO=new ProjectCompleteDTO();
+        updateProjectStatusByUsername(username);
         projectCompleteDTO.setCreateComplete(projectMapper.GetIsEndCount(username,"creater",1));
         projectCompleteDTO.setCreateNotComplete(projectMapper.GetIsEndCount(username,"creater",0));
         projectCompleteDTO.setJoinComplete(projectMapper.GetIsEndCount(username,"join",1));
@@ -209,6 +210,41 @@ public class ProjectServiceImpl implements ProjectService {
         projectCompleteDTO.setWatchComplete(projectMapper.GetIsEndCount(username,"watch",1));
         projectCompleteDTO.setWatchNotComplete(projectMapper.GetIsEndCount(username,"watch",0));
         return projectCompleteDTO;
+    }
+
+    private void updateProjectStatusByUsername(String username) {
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andUserIdEqualTo(username);
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        for(ProjectUser record:projectUserList){
+            if (!checkModuleStatusByProjectId(record.getProjectId())){
+                continue;
+            }
+            Project project = new Project();
+            project.setProjectId(record.getProjectId());
+            project.setIsEnd(true);
+            projectMapper.updateByPrimaryKeySelective(project);
+        }
+    }
+
+    private boolean checkModuleStatusByProjectId(Integer projectId) {
+        ModuleExample moduleExample = new ModuleExample();
+        moduleExample.createCriteria().andProjectIdEqualTo(projectId);
+        List<Module> moduleList = moduleMapper.selectByExample(moduleExample);
+        for (Module record:moduleList){
+            if (record.getIsDefault()){
+                DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(record.getDefaultmoduleId());
+                if (defaultData ==null || (!defaultData.getIsCalculate() && defaultData.getIsUserful())){
+                    return false;
+                }
+            }
+            else {
+                if (!record.getIsCalculate() && record.getIsUserful()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 

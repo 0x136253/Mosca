@@ -114,6 +114,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if(!admin.getIsPass()){
+                throw new UsernameNotFoundException("账户未审核");
+            }
             if (admin != null) {
 //                return new AdminUserDetails(admin,roleMapper.selectByuserId(admin.getId()));
                 RoleExample roleExample=new RoleExample();
