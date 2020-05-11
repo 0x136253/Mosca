@@ -2,6 +2,7 @@ package com.mutiny.demo.Service.Impl;
 
 import com.mutiny.demo.Service.ProjectService;
 import com.mutiny.demo.component.KeyFileComponent;
+import com.mutiny.demo.component.PortraitComponent;
 import com.mutiny.demo.dao.*;
 import com.mutiny.demo.dto.*;
 import com.mutiny.demo.message.MessageSender;
@@ -37,6 +38,8 @@ public class ProjectServiceImpl implements ProjectService {
     private FileOtherMapper fileOtherMapper;
     @Autowired
     private MessageSender messageSender;
+    @Autowired
+    private PortraitComponent portraitComponent;
     /**
      * 还需加入creater
      * @param project
@@ -311,10 +314,7 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectMemberDTO projectMemberDTO = new ProjectMemberDTO(r.getUserId(),r.getIntime(),r.getType());
             User user = userMapper.selectByPrimaryKey(r.getUserId());
             projectMemberDTO.setName(user.getName());
-            if (user.getPortraitId()!=null){
-                FileOther fileOther = new FileOther();
-                projectMemberDTO.setPortraitURL(fileOther.getFileUrl());
-            }
+            projectMemberDTO.setPortraitURL("/image/"+portraitComponent.getImg(user.getId()));
             answ.add(projectMemberDTO);
         }
         return answ;
@@ -345,6 +345,28 @@ public class ProjectServiceImpl implements ProjectService {
             answ.add(projectNoModuleDTO);
         }
         return answ;
+    }
+
+    @Override
+    public String getMemberOut(int projectID, String outUsername, String Username) throws Exception {
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andProjectIdEqualTo(projectID).andTypeEqualTo("creater");
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        if (!projectUserList.get(0).getUserId().equals(Username)){
+            throw new Exception("Your Have No Permission");
+        }
+        projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andProjectIdEqualTo(projectID).andUserIdEqualTo(outUsername);
+        projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        if (projectUserList.size()==0){
+            throw new Exception("This Member Not Exist");
+        }
+        ProjectUser projectUser = projectUserList.get(0);
+        if (projectUser.getType().equals("creater")){
+            throw new Exception("Your can't remove the creater out");
+        }
+        projectUserMapper.deleteByPrimaryKey(projectUser.getRelationId());
+        return "Your Have Successfully remove the "+ projectUser.getType()+" "+projectUser.getUserId()+" out.";
     }
 
 

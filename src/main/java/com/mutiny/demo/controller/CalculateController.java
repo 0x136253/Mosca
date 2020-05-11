@@ -66,7 +66,7 @@ public class CalculateController {
         return CommonResult.success(answ);
     }
 
-    @MyCalLog(Type = "cal")
+    @MyCalLog(Type = "cal",IsDefault = true)
     @ApiOperation(value = "计算固定模型")
     @RequestMapping(value = "/caldefault/{defaultDataId}", method = RequestMethod.GET)
     @ResponseBody

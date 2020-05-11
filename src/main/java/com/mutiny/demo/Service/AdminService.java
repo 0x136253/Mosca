@@ -1,5 +1,8 @@
 package com.mutiny.demo.Service;
 
+import com.mutiny.demo.dto.UpdateMailDTO;
+import com.mutiny.demo.dto.UpdateTelDTO;
+import com.mutiny.demo.dto.UpdatepasswordDTO;
 import com.mutiny.demo.dto.UserCheckDTO;
 import com.mutiny.demo.pojo.Company;
 import com.mutiny.demo.pojo.Govern;
@@ -24,4 +27,8 @@ public interface AdminService {
     List<UserCheckDTO> showUserNotPass() throws Exception;
 
     String changeUserCheck(String username, boolean pos) throws Exception;
+
+    String updatepassword(UpdatepasswordDTO updatepasswordDTO,String username) throws Exception;
+    String updateTel(UpdateTelDTO updateTelDTO, String username) throws Exception;
+    String updateMail(UpdateMailDTO updateMailDTO,String username) throws  Exception;
 }

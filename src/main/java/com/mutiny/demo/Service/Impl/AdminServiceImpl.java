@@ -4,8 +4,7 @@ import com.mutiny.demo.Service.AdminService;
 import com.mutiny.demo.Service.Token_redisService;
 import com.mutiny.demo.component.PortraitComponent;
 import com.mutiny.demo.dao.*;
-import com.mutiny.demo.dto.AdminUserDetails;
-import com.mutiny.demo.dto.UserCheckDTO;
+import com.mutiny.demo.dto.*;
 import com.mutiny.demo.pojo.*;
 import com.mutiny.demo.util.JwtTokenUtil;
 import org.slf4j.Logger;
@@ -318,14 +317,40 @@ public class AdminServiceImpl implements AdminService {
 //        }
         return path;
     }
-//    @Override
-//    public boolean updatepassword(UpdatepasswordDTO updatepasswordDTO) {
-//        token_redisService.delete(updatepasswordDTO.getUsername());
-//        User user=userMapper.selectByPrimaryKey(updatepasswordDTO.getUsername());
-//        String password =passwordEncoder.encode(updatepasswordDTO.getNewpassword());
-//        user.setPassword(password);
-//        userMapper.updateByPrimaryKey(user);
-//        return true;
-//    }
+    @Override
+    public String updatepassword(UpdatepasswordDTO updatepasswordDTO,String username) throws Exception{
+        User user=userMapper.selectByPrimaryKey(username);
+        if (!passwordEncoder.matches(updatepasswordDTO.getOldPassWord(),user.getPassword())){
+            throw new Exception("Old Password Not Match");
+        }
+        String password =passwordEncoder.encode(updatepasswordDTO.getNewPassWord());
+        user.setPassword(password);
+        userMapper.updateByPrimaryKeySelective(user);
+        return "Success";
+    }
+
+    @Override
+    public String updateTel(UpdateTelDTO updateTelDTO, String username) throws Exception {
+        User user=userMapper.selectByPrimaryKey(username);
+        if (!updateTelDTO.getOldTel().equals(user.getTel())){
+            throw new Exception("Old Tel Not Match");
+        }
+        String tel =updateTelDTO.getNewTel();
+        user.setTel(tel);
+        userMapper.updateByPrimaryKeySelective(user);
+        return "Success";
+    }
+
+    @Override
+    public String updateMail(UpdateMailDTO updateMailDTO, String username) throws Exception {
+        User user=userMapper.selectByPrimaryKey(username);
+        if (!updateMailDTO.getOldMail().equals(user.getEmail())){
+            throw new Exception("Old Mail Not Match");
+        }
+        String Mail =updateMailDTO.getNewMail();
+        user.setEmail(Mail);
+        userMapper.updateByPrimaryKeySelective(user);
+        return "Success";
+    }
 
 }

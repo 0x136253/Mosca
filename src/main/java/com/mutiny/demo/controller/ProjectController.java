@@ -390,6 +390,21 @@ public class ProjectController {
         return CommonResult.success(str);
     }
 
+    @MyLog(operation = "踢出项目成员",database = "Project,Project_User")
+    @ApiOperation(value = "踢出项目成员")
+    @RequestMapping(value = "/getMemberOut/{projectID}/{username}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getMemberOut(@PathVariable int projectID,@PathVariable String username){
+        String str = null;
+        try {
+            str= projectService.getMemberOut(projectID,username,GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
     @MyLog(operation = "创建了项目没继续的",database = "Project,Project_User,Module")
     @ApiOperation(value = "创建了项目没继续的")
     @RequestMapping(value = "/showProjectNoModule", method = RequestMethod.GET)

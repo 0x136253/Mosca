@@ -88,12 +88,20 @@ public class SysCalLogAspect {
                 moduleID = (Integer) paramValues[i];
             }
         }
-        sysLog.setModuleid(moduleID);
-        sysLog.setIsDefault(isDefault);
-        Module module = moduleMapper.selectByPrimaryKey(moduleID);
-        if (module!=null && module.getIsDefault()){
-            sysLog.setIsDefault(module.getIsDefault());
-            sysLog.setModuleid(module.getDefaultmoduleId());
+        if (isDefault){
+            sysLog.setIsDefault(isDefault);
+            sysLog.setDefaultdataid(moduleID);
+        }
+        else {
+            sysLog.setModuleid(moduleID);
+            Module module = moduleMapper.selectByPrimaryKey(moduleID);
+            if (module!=null && module.getIsDefault()){
+                sysLog.setIsDefault(module.getIsDefault());
+                sysLog.setModuleid(module.getModuleId());
+                if (module.getIsDefault()){
+                    sysLog.setDefaultdataid(module.getDefaultmoduleId());
+                }
+            }
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         //获取用户名

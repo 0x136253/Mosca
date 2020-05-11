@@ -204,6 +204,56 @@ public class AccountController {
         return CommonResult.success(user);
     }
 
+    @MyLog(operation = "修改密码",database = "User")
+    @ApiOperation(value = "修改密码")
+    @RequestMapping(value = "/updatePassWord", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> updatePassWord(@RequestBody UpdatepasswordDTO updatepasswordDTO){
+        String user = null;
+        try {
+            user = adminService.updatepassword(updatepasswordDTO,GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
+    @MyLog(operation = "修改手机",database = "User")
+    @ApiOperation(value = "修改手机")
+    @RequestMapping(value = "/UpdateTel", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> UpdateTel(@RequestBody UpdateTelDTO UpdateTelDTO){
+        String user = null;
+        try {
+            user = adminService.updateTel(UpdateTelDTO,GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
+    @MyLog(operation = "修改邮箱",database = "User")
+    @ApiOperation(value = "修改邮箱")
+    @RequestMapping(value = "/updateMail", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> updateMail(@RequestBody UpdateMailDTO UpdateMailDTO){
+        String user = null;
+        try {
+            user = adminService.updateMail(UpdateMailDTO,GetUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(user);
+    }
+
+
+
     @MyLog(operation = "验证token",database = "")
     @ApiOperation(value = "验证token")
     @RequestMapping(value = "/check", method = RequestMethod.GET)
