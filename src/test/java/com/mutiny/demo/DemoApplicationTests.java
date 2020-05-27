@@ -182,4 +182,17 @@ public class DemoApplicationTests {
         }
         System.out.println(CSVUtils.writeCsvFile("/home/anon/下载/",map));
     }
+
+    @Test
+    public void test22(){
+        List<Project> projectList = projectMapper.GetProjectListAll("mxx","creater",-10);
+        System.out.println(projectList.size());
+        projectList = projectMapper.GetProjectListAll("mxx","creater",0);
+        System.out.println(projectList.size());
+        projectList = projectMapper.GetProjectListAll("mxx","creater",1);
+        System.out.println(projectList.size());
+        for (Project re:projectList){
+            System.out.println(re);
+        }
+    }
 }

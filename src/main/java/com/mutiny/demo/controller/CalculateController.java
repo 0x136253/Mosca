@@ -5,6 +5,7 @@ package com.mutiny.demo.controller;
         import com.mutiny.demo.api.CommonResult;
         import com.mutiny.demo.api.MyCalLog;
         import com.mutiny.demo.api.MyLog;
+        import com.mutiny.demo.dto.ModuleInfoDTO;
         import com.mutiny.demo.dto.UserLoginDTO;
         import com.mutiny.demo.util.JwtTokenUtil;
         import io.swagger.annotations.Api;
@@ -120,6 +121,36 @@ public class CalculateController {
         Map<String, Object> str = null;
         try {
             str= moduleService.shoucalInfoDefualt(DefaultDataId,GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "返回当前帐号可以查看结果的module列表",database = "Module,DefaultData")
+    @ApiOperation(value = "返回当前帐号可以查看结果的module列表")
+    @RequestMapping(value = "/showCalcualteOKList", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM','USER')")
+    public ResponseEntity<Map<String,Object>> showCalcualteOKList(){
+        List<ModuleInfoDTO> str = null;
+        try {
+            str= moduleService.showCalcualteOKList(GetUsername());
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "返回当前帐号可以查看结果的module数量",database = "Module,DefaultData")
+    @ApiOperation(value = "返回当前帐号可以查看结果的module数量")
+    @RequestMapping(value = "/showCalcualteNum", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('ADMIN','GOVER','SYSTEM','USER')")
+    public ResponseEntity<Map<String,Object>> showCalcualteNum(){
+        Map<String, Object> str = null;
+        try {
+            str= moduleService.showCalcualteNum(GetUsername());
         }catch (Exception e){
             return CommonResult.failed(e.getMessage());
         }

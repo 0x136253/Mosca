@@ -1,5 +1,6 @@
 package com.mutiny.demo.dao;
 
+import com.mutiny.demo.dto.LogModuleDTO;
 import com.mutiny.demo.pojo.LogCalculate;
 import com.mutiny.demo.pojo.LogCalculateExample;
 import java.util.List;
@@ -60,4 +61,6 @@ public interface LogCalculateMapper {
      * @mbg.generated 2020-05-11 16:22:45
      */
     int updateByPrimaryKey(LogCalculate record);
+
+    List<LogModuleDTO> getModuleManager();
 }

@@ -208,10 +208,10 @@ public class ProjectServiceImpl implements ProjectService {
         updateProjectStatusByUsername(username);
         projectCompleteDTO.setCreateComplete(projectMapper.GetIsEndCount(username,"creater",1));
         projectCompleteDTO.setCreateNotComplete(projectMapper.GetIsEndCount(username,"creater",0));
-        projectCompleteDTO.setJoinComplete(projectMapper.GetIsEndCount(username,"join",1));
-        projectCompleteDTO.setJoinNotComplete(projectMapper.GetIsEndCount(username,"join",0));
-        projectCompleteDTO.setWatchComplete(projectMapper.GetIsEndCount(username,"watch",1));
-        projectCompleteDTO.setWatchNotComplete(projectMapper.GetIsEndCount(username,"watch",0));
+        projectCompleteDTO.setJoinComplete(projectMapper.GetIsEndCount(username,"parter",1));
+        projectCompleteDTO.setJoinNotComplete(projectMapper.GetIsEndCount(username,"parter",0));
+        projectCompleteDTO.setWatchComplete(projectMapper.GetIsEndCount(username,"watcher",1));
+        projectCompleteDTO.setWatchNotComplete(projectMapper.GetIsEndCount(username,"watcher",0));
         return projectCompleteDTO;
     }
 
@@ -367,6 +367,22 @@ public class ProjectServiceImpl implements ProjectService {
         }
         projectUserMapper.deleteByPrimaryKey(projectUser.getRelationId());
         return "Your Have Successfully remove the "+ projectUser.getType()+" "+projectUser.getUserId()+" out.";
+    }
+
+    @Override
+    public ProjectListDTO getProject(String username, String type) throws Exception {
+        List<Project> projectList1=projectMapper.GetProjectListAll(username,type,0);
+        List<Project> projectList2=projectMapper.GetProjectListAll(username,type,1);
+        ProjectListDTO projectListDTO=new ProjectListDTO();
+        List<ProjectInfoDTO> projectInfoDTOList=new ArrayList<>();
+        for (int i=0;i<projectList1.size();i++){
+            projectInfoDTOList.add(new ProjectInfoDTO(projectList1.get(i),username));
+        }
+        for (int i=0;i<projectList2.size();i++){
+            projectInfoDTOList.add(new ProjectInfoDTO(projectList2.get(i),username));
+        }
+        projectListDTO.setProjectInfoDTOS(projectInfoDTOList);
+        return projectListDTO;
     }
 
 

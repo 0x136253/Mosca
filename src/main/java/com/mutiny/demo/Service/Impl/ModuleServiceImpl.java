@@ -396,6 +396,42 @@ public class ModuleServiceImpl implements ModuleService {
         return "Success";
     }
 
+    public List<Module> getCalculateOkList(String username)throws Exception{
+        ProjectUserExample projectUserExample = new ProjectUserExample();
+        projectUserExample.createCriteria().andUserIdEqualTo(username);
+        List<ProjectUser> projectUserList = projectUserMapper.selectByExample(projectUserExample);
+        List<Module> answ = new ArrayList<>();
+        ModuleExample moduleExample = null;
+        for(ProjectUser record:projectUserList){
+            moduleExample = new ModuleExample();
+            moduleExample.createCriteria().andProjectIdEqualTo(record.getProjectId()).andIsUserfulEqualTo(true);
+            List<Module> tempModuleList = moduleMapper.selectByExample(moduleExample);
+            for (Module re:tempModuleList){
+                if (re.getIsCalculate()){
+                    answ.add(re);
+                }
+            }
+        }
+        return answ;
+    }
+
+    @Override
+    public  List<ModuleInfoDTO>  showCalcualteOKList(String Username) throws Exception {
+        List<ModuleInfoDTO> answ = new ArrayList<>();
+        List<Module> moduleList = getCalculateOkList(Username);
+        for(Module reocord:moduleList){
+            answ.add(new ModuleInfoDTO(reocord));
+        }
+        return answ;
+    }
+
+    @Override
+    public Map<String, Object> showCalcualteNum(String Username) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("num",getCalculateOkList(Username).size());
+        return map;
+    }
+
     private  int getprojectNumByDefaultModule(DefaultModule defaultModule){
         int answ = 0;
         DefaultDataExample defaultDataExample = new DefaultDataExample();

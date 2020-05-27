@@ -41,4 +41,8 @@ public interface ModuleService {
     List<DefaultModuleManagerDTO> getDefaultManager()throws Exception;
 
     String changeDefaultManager(int defaultId, boolean pos)throws Exception;
+
+    List<ModuleInfoDTO>  showCalcualteOKList(String Username)throws Exception;
+
+    Map<String, Object> showCalcualteNum(String Username)throws Exception;
 }

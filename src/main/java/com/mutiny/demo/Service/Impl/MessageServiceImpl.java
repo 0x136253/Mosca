@@ -5,11 +5,15 @@ import com.mutiny.demo.dto.MessageSendGroupDTO;
 import com.mutiny.demo.dto.MessageSendPrivateDTO;
 import com.mutiny.demo.dto.MessageSendPublicDTO;
 import com.mutiny.demo.message.*;
+import com.mutiny.demo.pojo.MessageInfo;
 import com.mutiny.demo.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Anonsmd
@@ -59,5 +63,28 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean deleteMessage(String username, int messageSendId) throws Exception {
         return messageReceiver.deleteMessage(username,messageSendId);
+    }
+
+    @Override
+    public List<MessageInto> getMessageSmallByTitle(String username,String title) throws Exception {
+        return showMessageSmall(username,title);
+    }
+
+    @Override
+    public Map<String, Object> getMessageNumByTitle(String username,String title) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("num",showMessageSmall(username,title).size());
+        return map;
+    }
+
+    public List<MessageInto> showMessageSmall(String username,String title) throws Exception {
+        List<MessageInto> messageIntoList =messageReceiver.getMessageSmall(username);
+        List<MessageInto> answ = new ArrayList<>();
+        for (MessageInto record:messageIntoList){
+            if (record.getTitle().equals(title)){
+                answ.add(record);
+            }
+        }
+        return answ;
     }
 }

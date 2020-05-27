@@ -95,13 +95,15 @@ WHERE Project_User.User_ID=#{0,jdbcType=VARCHAR} AND  Project.Is_Userful=1  AND 
   <select id="GetProjectList" resultMap="BaseResultMap">
     SELECT Project.* FROM `Project_User`
     LEFT JOIN Project on Project_User.Project_ID=Project.Project_ID
-    WHERE Project_User.User_ID=#{0,jdbcType=VARCHAR} AND Project_User.Type=#{1,jdbcType=VARCHAR} AND Project.Is_Userful=1 AND Project.Is_Default = #{2,jdbcType=BIT}
+    WHERE Project_User.User_ID=#{0,jdbcType=VARCHAR} AND Project_User.Type=#{1,jdbcType=VARCHAR} AND Project.Is_Userful=1
+      AND Project.Is_Default = #{2,jdbcType=BIT}
     LIMIT #{3} , #{4}
   </select>
   <select id="GetProjectListAll" resultMap="BaseResultMap">
     SELECT Project.* FROM `Project_User`
     LEFT JOIN Project on Project_User.Project_ID=Project.Project_ID
-    WHERE Project_User.User_ID=#{0,jdbcType=VARCHAR} AND Project_User.Type=#{1,jdbcType=VARCHAR} AND Project.Is_Userful=1 AND Project.Is_Default = #{2,jdbcType=BIT}
+    WHERE Project_User.User_ID=#{0,jdbcType=VARCHAR} AND Project_User.Type=#{1,jdbcType=VARCHAR} AND Project.Is_Userful=1
+      AND Project.Is_Default = #{2,jdbcType=BIT}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--

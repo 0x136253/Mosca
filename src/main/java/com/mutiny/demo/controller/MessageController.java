@@ -138,4 +138,34 @@ public class MessageController {
         }
         return CommonResult.success(str);
     }
+
+    @MyLog(operation = "根据title返回消息数量", database = "Message_Send")
+    @ApiOperation(value = "根据title返回消息数量")
+    @RequestMapping(value = "/getMessageNumByTitle/{title}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getMessageNumByTitle(@PathVariable String title){
+        Map<String,Object> str = null;
+        try {
+            str= messageService.getMessageNumByTitle(GetUsername(),title);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
+
+    @MyLog(operation = "根据title返回消息概要", database = "Message_Send")
+    @ApiOperation(value = "根据title返回消息概要")
+    @RequestMapping(value = "/getMessageSmallByTitle/{title}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getMessageSmallByTitle(@PathVariable String title){
+        List<MessageInto> str = null;
+        try {
+            str= messageService.getMessageSmallByTitle(GetUsername(),title);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
 }

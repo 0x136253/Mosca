@@ -25,4 +25,6 @@ public interface ProjectService {
     List<ProjectMemberDTO> getProjectMember(int projectID) throws Exception;
     List<ProjectNoModuleDTO> showProjectNoModule(String username) throws Exception;
     String getMemberOut(int projectID, String outUsername, String Username) throws Exception;
+
+    ProjectListDTO getProject(String username, String type) throws Exception;
 }

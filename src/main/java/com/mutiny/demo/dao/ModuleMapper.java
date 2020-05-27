@@ -1,5 +1,7 @@
 package com.mutiny.demo.dao;
 
+import com.mutiny.demo.dto.ModuleDataInfoDTO;
+import com.mutiny.demo.dto.ModuleSInfo;
 import com.mutiny.demo.pojo.Module;
 import com.mutiny.demo.pojo.ModuleExample;
 import java.util.List;
@@ -61,4 +63,6 @@ public interface ModuleMapper {
      */
     int updateByPrimaryKey(Module record);
     int GetCount();
+    ModuleSInfo GetModulesInfo(Integer moduleId);
+    List<ModuleDataInfoDTO> GetModuleDataInfo();
 }

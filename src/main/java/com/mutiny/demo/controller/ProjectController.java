@@ -419,4 +419,19 @@ public class ProjectController {
         }
         return CommonResult.success(str);
     }
+
+    @MyLog(operation = "查看所有项目包括固定(移动端)",database = "Project,Project_User")
+    @ApiOperation(value = "查看所有项目包括固定(移动端)[type 为 'watcher'/'parter'/'creater']")
+    @RequestMapping(value = "/getProjectall/{type}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('USER','ADMIN','GOVER','SYSTEM')")
+    public ResponseEntity<Map<String,Object>> getProjectall(@PathVariable String type){
+        ProjectListDTO str = null;
+        try {
+            str= projectService.getProject(GetUsername(),type);
+        }catch (Exception e){
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(str);
+    }
 }

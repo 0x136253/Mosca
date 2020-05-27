@@ -7,6 +7,7 @@ import com.mutiny.demo.message.MessageDeta;
 import com.mutiny.demo.message.MessageInto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Anonsmd
@@ -19,4 +20,8 @@ public interface MessageService {
     List<MessageInto> getMessageSmall(String username) throws Exception;
     MessageDeta getMessageBig(String username, int messageId) throws Exception;
     boolean deleteMessage(String username,int messageSendId) throws Exception;
+
+    List<MessageInto> getMessageSmallByTitle(String username,String title)throws Exception;
+
+    Map<String, Object> getMessageNumByTitle(String username,String title)throws Exception;
 }

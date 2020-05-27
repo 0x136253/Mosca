@@ -176,6 +176,7 @@ public class FileModuleServiceImpl implements FileModuleService {
                 String projectUser = projectUserMapper.findCreater(module.getProjectId());
                 String text = String.format("您的ID为%d项目中的模型(ID=%d)参数已齐全，现在可前往平台开始计算",module.getProjectId(),moduleId);
                 messageSender.sendPrivate("模型情况通报",text,projectUser);
+                moduleMapper.updateByPrimaryKeySelective(module);
             }
             else {
                 DefaultData defaultData = new DefaultData();

@@ -27,6 +27,20 @@
     <result column="calTime" jdbcType="TIMESTAMP" property="caltime" />
     <result column="completeTime" jdbcType="TIMESTAMP" property="completetime" />
   </resultMap>
+  <resultMap id="ModuleSInfo" type="com.mutiny.demo.dto.ModuleSInfo">
+    <result column="projectName" jdbcType="VARCHAR" property="projectName" />
+    <result column="projectPurpose" jdbcType="VARCHAR" property="projectPurpose" />
+    <result column="projectDescription" jdbcType="VARCHAR" property="projectDescription" />
+    <result column="ModuleDescriptino" jdbcType="VARCHAR" property="ModuleDescriptino" />
+  </resultMap>
+  <resultMap id="ModuleDataInfoDTO" type="com.mutiny.demo.dto.ModuleDataInfoDTO">
+    <result column="moduleName" jdbcType="VARCHAR" property="moduleName" />
+    <result column="upTime" jdbcType="TIMESTAMP" property="upTime" />
+    <result column="isCalculate" jdbcType="BIT" property="isCalculate" />
+    <result column="getAnswNum" jdbcType="INTEGER" property="getAnswNum" />
+    <result column="FileURl" jdbcType="VARCHAR" property="FileURl" />
+    <result column="moduleId" jdbcType="INTEGER" property="moduleId" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
@@ -352,5 +366,31 @@
   </update>
   <select id="GetCount" resultType="java.lang.Integer">
     select count(*) from Module
+  </select>
+  <select id="GetModulesInfo" parameterType="java.lang.Integer" resultMap="ModuleSInfo">
+SELECT Project.Project_Name AS "projectName",
+			Project.Project_Purpose AS "projectPurpose",
+			Project.Project_Description AS "projectDescription",
+			Module.Description AS "ModuleDescriptino"
+FROM Module
+LEFT JOIN Project ON Project.Project_ID = Module.Project_ID
+WHERE Module.Module_ID = #{0,jdbcType=INTEGER}
+  </select>
+  <select id="GetModuleDataInfo" resultMap="ModuleDataInfoDTO">
+    SELECT
+    M.Module_ID AS "moduleId",
+    M.Module_Name AS "moduleName",
+    M.upTime AS "upTime",
+    M.Is_Calculate AS "isCalculate"
+    ,File_URL AS "FileURl"
+    ,LOG.getAnswNum
+    FROM Module M
+    LEFT JOIN(SELECT
+    Log_Calculate.ModuleID As "moduleIds",count(*) AS "getAnswNum"
+    FROM Log_Calculate
+    WHERE Log_Calculate.ModuleID IS NOT NULL AND  Log_Calculate.ModuleID != 0
+    GROUP BY Log_Calculate.ModuleID) LOG ON LOG.moduleIds = M.Module_ID
+    LEFT JOIN File_Module ON File_Module.Module_ID =  M.Module_ID
+    WHERE M.Is_Default = FALSE
   </select>
 </mapper>
