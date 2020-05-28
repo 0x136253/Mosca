@@ -83,14 +83,18 @@ public class SysCalLogAspect {
         Object[] paramValues = joinPoint.getArgs();
         String[] paramNames = ((CodeSignature) joinPoint.getSignature()).getParameterNames();
         int moduleID = 0;
+        int defaultDataId = 0;
         for (int i=0;i<paramNames.length;i++){
             if (paramNames[i].equals("ModuleID")){
                 moduleID = (Integer) paramValues[i];
             }
+            else if (paramNames[i].equals("defaultDataId")){
+                defaultDataId = (Integer) paramValues[i];
+            }
         }
         if (isDefault){
             sysLog.setIsDefault(isDefault);
-            sysLog.setDefaultdataid(moduleID);
+            sysLog.setDefaultdataid(defaultDataId);
         }
         else {
             sysLog.setModuleid(moduleID);

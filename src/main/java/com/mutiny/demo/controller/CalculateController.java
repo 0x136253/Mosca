@@ -77,6 +77,7 @@ public class CalculateController {
         try {
             answ = calculateService.calDefaultModule(defaultDataId,GetUsername());
         } catch (Exception e) {
+            e.printStackTrace();
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(answ);
