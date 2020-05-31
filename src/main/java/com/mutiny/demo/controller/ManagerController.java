@@ -4,10 +4,7 @@ package com.mutiny.demo.controller;
 import com.mutiny.demo.Service.ManagerService;
 import com.mutiny.demo.api.CommonResult;
 import com.mutiny.demo.api.MyLog;
-import com.mutiny.demo.dto.LogModuleDTO;
-import com.mutiny.demo.dto.ModuleDataInfoDTO;
-import com.mutiny.demo.dto.ModuleSInfo;
-import com.mutiny.demo.dto.UserLoginDTO;
+import com.mutiny.demo.dto.*;
 import com.mutiny.demo.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -100,6 +97,39 @@ public class ManagerController {
         }
         return CommonResult.success(answ);
     }
+
+    @MyLog(operation = "接口请求量",database = "Log")
+    @ApiOperation(value = "接口请求量")
+    @RequestMapping(value = "/showApiData/{day}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('SYSTEM')")
+    public ResponseEntity<Map<String,Object>> showApiData(@PathVariable int day){
+        List<CalculateShowCalOUTDTO> answ = null;
+        try {
+            answ = managerService.showApiData(day);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
+    @MyLog(operation = "获取关键指标",database = "Log")
+    @ApiOperation(value = "获取关键指标")
+    @RequestMapping(value = "/Getkeyindicators", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAnyRole('SYSTEM')")
+    public ResponseEntity<Map<String,Object>> Getkeyindicators(){
+        Map<String,Integer> answ = null;
+        try {
+            answ = managerService.Getkeyindicators();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.success(answ);
+    }
+
 
 
     public String pathHandle(String path){

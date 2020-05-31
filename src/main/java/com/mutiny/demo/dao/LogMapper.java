@@ -1,5 +1,6 @@
 package com.mutiny.demo.dao;
 
+import com.mutiny.demo.dto.CalculateShowCalDTO;
 import com.mutiny.demo.pojo.Log;
 import com.mutiny.demo.pojo.LogExample;
 import java.util.List;
@@ -28,4 +29,5 @@ public interface LogMapper {
      * @mbg.generated 2020-01-30 11:38:32
      */
     List<Log> selectByExample(LogExample example);
+    List<CalculateShowCalDTO> showApiData();
 }

@@ -16,6 +16,10 @@
     <result column="Operation_Time" jdbcType="TIMESTAMP" property="operationTime" />
     <result column="IP" jdbcType="VARCHAR" property="ip" />
   </resultMap>
+  <resultMap id="CalculateShowMap" type="com.mutiny.demo.dto.CalculateShowCalDTO">
+    <result column="data" jdbcType="DATE" property="data" />
+    <result column="num" jdbcType="VARCHAR" property="num" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
@@ -152,4 +156,7 @@
       </if>
     </trim>
   </insert>
+  <select id="showApiData" resultMap="CalculateShowMap">
+     select DATE_FORMAT(Operation_Time,'%Y-%m-%d') as data,count(*) as num from Log group by data
+  </select>
 </mapper>
