@@ -29,6 +29,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private DefaultDataMapper defaultDataMapper;
     @Autowired
+    private DefaultModuleMapper defaultModuleMapper;
+    @Autowired
     private KeyFileComponent keyFileComponent;
     @Autowired
     private ModuleUserMapper moduleUserMapper;
@@ -174,6 +176,7 @@ public class ProjectServiceImpl implements ProjectService {
             module.setDescription(defaultData.getDescription());
             module.setModuleName(defaultData.getDataName());
             module.setIsCalculate(defaultData.getIsCalculate());
+            module.setMultnum(defaultModuleMapper.selectByPrimaryKey(defaultData.getDefaultId()).getMultnum());
             moduleMapper.insertSelective(module);
 
             ModuleUser moduleUser = new ModuleUser();

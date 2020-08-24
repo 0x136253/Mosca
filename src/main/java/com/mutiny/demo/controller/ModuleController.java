@@ -197,6 +197,7 @@ public class ModuleController {
         try {
             str= moduleService.returnKey(moduleId,false);
         }catch (Exception e){
+            e.printStackTrace();
             return CommonResult.failed(e.getMessage());
         }
         return CommonResult.success(str);

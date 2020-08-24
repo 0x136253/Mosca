@@ -116,7 +116,9 @@ public class ModuleServiceImpl implements ModuleService {
         List<FileAnswer> fileAnswerList = new ArrayList<>();
         if (module.getIsDefault()){
             DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(module.getDefaultmoduleId());
-            if (defaultData.getIsCalculate()){
+            DefaultModule defaultModule = defaultModuleMapper.selectByPrimaryKey(defaultData.getDefaultId());
+            module.setMultnum(defaultModule.getMultnum());
+            if (!defaultData.getIsCalculate()){
                 throw new  Exception("DefaultData Answ File Not Exist,Calculate not complete");
             }
             else if(!defaultData.getIsUserful()){
@@ -225,12 +227,12 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public KeyDTO returnKey(int moduleId, boolean isDefaultId) throws Exception {
         int keyId = 0;
-        if (isDefaultId){
-            DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(moduleId);
+        Module module = moduleMapper.selectByPrimaryKey(moduleId);
+        if (module.getIsDefault()){
+            DefaultData defaultData = defaultDataMapper.selectByPrimaryKey(module.getDefaultmoduleId());
             keyId = defaultData.getKeyfileid();
         }
         else{
-            Module module = moduleMapper.selectByPrimaryKey(moduleId);
             keyId = module.getKeyfileid();
         }
         Key key = keyFileComponent.getKey(keyId);
